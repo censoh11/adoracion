@@ -1,0 +1,2041 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IGLESIA VISIONARIA HEBREOS 11</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #667085;
+      --line: #d8dee8;
+      --soft: #f5f7fa;
+      --panel: #ffffff;
+      --navy: #0b2d52;
+      --gold: #f5a313;
+      --green: #166534;
+      --teal: #0f766e;
+      --danger: #b42318;
+      --shadow: 0 18px 45px rgba(16, 24, 40, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #eef2f5; font-family: Arial, Helvetica, sans-serif; line-height: 1.4; }
+    button, input, textarea, select { font: inherit; }
+
+    .app { min-height: 100vh; display: grid; grid-template-columns: 335px 1fr; }
+    aside { background: var(--navy); color: #fff; padding: 24px; display: flex; flex-direction: column; gap: 22px; }
+    .brand { display: grid; gap: 12px; }
+    .brand img { width: 74px; height: 74px; object-fit: contain; background: #fff; border-radius: 8px; padding: 6px; }
+    .brand h1 { font-size: 22px; margin: 0; letter-spacing: 0; }
+    .brand p { margin: 0; color: #d7e2ed; font-size: 14px; }
+    .progress { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 16px; }
+    .progress strong { display: block; font-size: 34px; margin-bottom: 4px; }
+    .side-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .side-metric { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 12px; }
+    .side-metric strong { display: block; font-size: 28px; }
+    .side-metric span { color: #d7e2ed; font-size: 13px; }
+    .bar { height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,0.18); margin-top: 12px; }
+    .bar span { display: block; height: 100%; width: 0%; background: var(--gold); transition: width 160ms ease; }
+    .steps { display: grid; gap: 8px; }
+    .step { width: 100%; text-align: left; border: 0; border-radius: 8px; padding: 12px 14px; background: rgba(255,255,255,0.08); color: #f8fafc; cursor: pointer; }
+    .step.active { background: #fff; color: #111827; }
+
+    main { padding: 28px; overflow: auto; }
+    .topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .topline h2 { margin: 0; font-size: 28px; letter-spacing: 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 8px; padding: 11px 14px; min-height: 44px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
+    .btn.primary { border-color: var(--navy); background: var(--navy); color: #fff; }
+    .btn.gold { border-color: var(--gold); background: var(--gold); color: #111827; font-weight: 700; }
+    .btn.green { border-color: var(--green); background: var(--green); color: #fff; }
+    .btn.danger { color: var(--danger); }
+    .btn.compact { min-height: 36px; padding: 7px 10px; }
+
+    section { display: none; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; box-shadow: var(--shadow); }
+    section.active { display: block; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .wide { grid-column: 1 / -1; }
+    label { display: grid; gap: 7px; color: #344054; font-weight: 700; font-size: 14px; }
+    input, textarea, select { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 12px 13px; min-height: 46px; background: #fff; color: var(--ink); }
+    textarea { resize: vertical; min-height: 124px; }
+    .helper { color: var(--muted); margin: 0 0 18px; }
+
+    .header-preview { display: grid; grid-template-columns: 88px 1fr; gap: 18px; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 18px; background: linear-gradient(135deg, #ffffff, #f7f9fc); margin-bottom: 18px; }
+    .header-preview img { width: 82px; height: 82px; object-fit: contain; }
+    .header-preview strong { display: block; color: var(--navy); font-size: 24px; }
+    .header-preview span { display: block; color: var(--gold); font-weight: 800; font-size: 18px; margin-top: 3px; }
+    .toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-bottom: 18px; }
+    .list { display: grid; gap: 10px; }
+    .row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fff; }
+    .row strong { display: block; font-size: 16px; }
+    .row small { color: var(--muted); }
+    .row.inactive { color: #98a2b3; background: #f2f4f7; }
+    .row.inactive strong, .row.inactive small { color: #98a2b3; }
+    .badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+    .badge { border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 700; background: #fff3cd; color: #7a4b00; min-width: 86px; text-align: center; }
+    .badge input { width: auto; min-height: auto; margin-right: 4px; }
+    .badge.done { background: #d1fadf; color: #087443; }
+    .badge.late { background: #fee4e2; color: var(--danger); }
+    .badge.neutral { background: #e4e7ec; color: #344054; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: var(--soft); }
+    .metric strong { display: block; font-size: 26px; }
+    .metric span { color: var(--muted); font-size: 14px; }
+    .notice { border: 1px solid #fedf89; background: #fffaeb; color: #7a4b00; border-radius: 8px; padding: 14px; margin-top: 14px; }
+    .pdf-link { display: none; margin-top: 12px; font-weight: 700; color: var(--navy); }
+    .locked-note { display: none; border: 1px solid #bbf7d0; background: #f0fdf4; color: #14532d; border-radius: 8px; padding: 12px; margin: 14px 0; }
+    .locked-note.show { display: block; }
+
+    dialog { width: min(920px, calc(100vw - 24px)); border: 0; border-radius: 8px; padding: 0; box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28); }
+    dialog::backdrop { background: rgba(15, 23, 42, 0.55); }
+    .modal { padding: 18px; max-height: 92vh; overflow: auto; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .modal-head h3 { margin: 0; font-size: 22px; }
+    .score-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .range-line { display: grid; grid-template-columns: 1fr 58px; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+    .range-line span { font-weight: 700; color: #344054; }
+    .range-line output { text-align: center; font-weight: 700; color: var(--navy); }
+    .range-line input { grid-column: 1 / -1; padding: 0; min-height: auto; accent-color: var(--navy); }
+    .signature-pad { width: 100%; height: 280px; border: 2px solid #344054; border-radius: 8px; background: #fff; touch-action: none; display: block; margin-top: 12px; }
+    .sign-context { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: var(--soft); margin-bottom: 12px; }
+    .sign-context strong { display: block; font-size: 20px; }
+    .sign-context span { color: var(--muted); }
+    .mini-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .mini-table th, .mini-table td { border-bottom: 1px solid var(--line); padding: 9px; text-align: left; vertical-align: top; }
+    .mini-table th { color: var(--navy); background: #f8fafc; }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      .topline { align-items: flex-start; flex-direction: column; }
+      .grid, .summary-grid, .toolbar, .score-grid { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr; }
+      .badges { justify-content: flex-start; }
+      main { padding: 16px; }
+      section { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <img src="logo-hebreos-11.png" alt="Logo Hebreos 11" />
+        <h1>IGLESIA VISIONARIA HEBREOS 11</h1>
+        <p>PILAR DE ADORACIÓN</p>
+      </div>
+      <div class="progress">
+        <strong id="progressCount">0/0</strong>
+        <span>Checking Completado</span>
+        <div class="bar"><span id="progressBar"></span></div>
+      </div>
+      <div class="side-metrics">
+        <div class="side-metric">
+          <strong id="sideChecked">0</strong>
+          <span>Checking</span>
+        </div>
+        <div class="side-metric">
+          <strong id="sideEvaluated">0</strong>
+          <span>Evaluados</span>
+        </div>
+      </div>
+      <nav class="steps" aria-label="Secciones">
+        <button class="step active" data-section="evento">Evento</button>
+        <button class="step" data-section="lista">Colaboradores</button>
+        <button class="step" data-section="checking">Checking</button>
+        <button class="step" data-section="evaluacion">Evaluación</button>
+        <button class="step" data-section="resumen">Resumen y PDF</button>
+        <button class="step" data-section="historico">Hist&oacute;rico</button>
+        <button class="step" data-section="kpis">KPIs</button>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="topline">
+        <h2 id="sectionTitle">Evento</h2>
+        <div class="actions">
+          <button class="btn" id="saveDraft">Guardar avance</button>
+          <button class="btn danger" id="resetAllTop" style="display:none;">Nuevo evento</button>
+          <button class="btn primary" id="downloadPdf">Generar PDF</button>
+        </div>
+      </div>
+
+      <section class="active" id="evento">
+        <div class="header-preview">
+          <img src="logo-hebreos-11.png" alt="Logo Hebreos 11" />
+          <div>
+            <strong>IGLESIA VISIONARIA HEBREOS 11</strong>
+            <span>PILAR DE ADORACIÓN</span>
+          </div>
+        </div>
+        <p class="helper">Aquí defines el evento. Luego asignas asistentes desde la lista general de colaboradores recurrentes.</p>
+        <div class="grid">
+          <label>Evento
+            <input id="eventName" placeholder="Nombre del evento" />
+          </label>
+          <label>Tipo de evento
+            <select id="eventType">
+              <option value="Culto">Culto</option>
+              <option value="Reunión">Reunión</option>
+              <option value="Taller">Taller</option>
+              <option value="Ensayo">Ensayo</option>
+              <option value="Manual">Manual</option>
+            </select>
+          </label>
+          <label>Fecha
+            <input id="eventDate" type="date" />
+          </label>
+          <label>Hora de inicio proyectada
+            <input id="startTime" type="time" />
+          </label>
+          <label>Rango de tardanza permitido (minutos)
+            <input id="lateTolerance" type="number" min="0" step="1" value="5" />
+          </label>
+          <label>Encargado
+            <select id="manager"></select>
+          </label>
+          <label>Código automático
+            <input id="autoCode" disabled />
+          </label>
+          <label>ID del evento
+            <input id="eventInternalId" placeholder="Se crea al guardar" disabled />
+          </label>
+          <label class="wide">Notas del evento
+            <textarea id="standardPeople" placeholder="Notas internas del evento. Los asistentes se asignan desde la pestaña Colaboradores."></textarea>
+          </label>
+          <label class="wide">Buscar y seleccionar participantes para este evento
+            <input id="eventParticipantSearch" placeholder="Buscar por nombre o código interno" />
+          </label>
+          <div class="wide list" id="eventParticipantList"></div>
+          <div class="wide">
+            <p class="helper" style="margin-top: 10px;">Participantes asignados al evento</p>
+            <div class="list" id="eventAssignedList"></div>
+          </div>
+        </div>
+        <div class="actions" style="margin-top: 16px;">
+          <button class="btn danger" id="resetAll">Nuevo evento</button>
+          <button class="btn gold" id="prepareRoster">Crear evento y preparar checking</button>
+          <button class="btn" id="unlockEvent">Editar evento</button>
+        </div>
+        <div class="locked-note" id="eventLockNote">Evento creado y bloqueado.</div>
+      </section>
+
+      <section id="lista">
+        <p class="helper">Padrón general de colaboradores recurrentes. Agrega todos los que quieras; solo aparecen en Checking cuando los asignas al evento o si se agregan como extra.</p>
+        <div class="toolbar">
+          <label>Código interno
+            <input id="masterCode" placeholder="Automático" disabled />
+          </label>
+          <label>Colaborador
+            <input id="masterName" placeholder="Nombre y apellido" />
+          </label>
+          <label>Código secreto
+            <input id="masterSecret" placeholder="Ej. 2468" />
+          </label>
+          <label>Cargos posibles
+            <div id="masterRoleOptions" class="badges"></div>
+          </label>
+          <input id="masterRoles" type="hidden" />
+          <input id="masterCanManage" type="hidden" />
+          <button class="btn" id="newMaster" type="button">Crear nuevo</button>
+          <button class="btn primary" id="addMaster">Guardar en lista general</button>
+        </div>
+        <label class="wide" style="margin-bottom: 14px;">Buscar en colaboradores
+          <input id="masterSearch" placeholder="Buscar por nombre" />
+        </label>
+        <div class="list" id="masterList"></div>
+      </section>
+
+      <section id="checking">
+        <p class="helper">Self-checking: el colaborador solo selecciona su nombre y firma. La hora de llegada se captura automaticamente al firmar.</p>
+        <div class="toolbar">
+          <label>Agregar extra al evento
+            <input id="manualName" placeholder="Nombre y apellido" />
+          </label>
+          <label>Código secreto
+            <input id="manualSecret" placeholder="Código" />
+          </label>
+          <button class="btn primary" id="addManual">Agregar extra</button>
+        </div>
+        <div class="list" id="checkingCandidateList"></div>
+        <div class="list" id="checkingList"></div>
+      </section>
+
+      <section id="evaluacion">
+        <p class="helper">Después del checking, el encargado evalúa a quienes ya se registraron. Las puntuaciones no aparecen en la pantalla de firma.</p>
+        <div class="list" id="evaluationList"></div>
+      </section>
+
+      <section id="resumen">
+        <div class="summary-grid">
+          <div class="metric"><strong id="totalPeople">0</strong><span>Asistentes</span></div>
+          <div class="metric"><strong id="checkedPeople">0</strong><span>Registrados</span></div>
+          <div class="metric"><strong id="onTimePeople">0</strong><span>A tiempo</span></div>
+          <div class="metric"><strong id="latePeople">0</strong><span>Tarde</span></div>
+        </div>
+        <p class="helper">El PDF incluye encabezado con logo, resumen de checking/evaluación y anexo de firmas.</p>
+        <div id="pdfNotice" class="notice">Prepara el listado y registra colaboradores para generar el documento final.</div>
+        <a id="pdfFallback" class="pdf-link" download="hebreos-11-pilar-adoracion.pdf">Abrir PDF generado</a>
+      </section>
+
+      <section id="historico">
+        <p class="helper">Administra la sincronizaci&oacute;n con Google Sheets y abre eventos anteriores para corregirlos o completarlos.</p>
+        <div class="actions">
+          <button class="btn green" id="syncSheet">Sincronizar evento actual</button>
+          <button class="btn" id="loadHistory">Actualizar KPIs</button>
+        </div>
+        <div id="sheetStatus" class="notice">Pendiente de conectar Google Sheets.</div>
+        <h3 style="margin:22px 0 12px;">Eventos anteriores</h3>
+        <label style="margin-bottom: 14px;">Buscar evento
+          <input id="historyEventSearch" placeholder="Buscar por ID, fecha, tipo o nombre" />
+        </label>
+        <div class="list" id="historyEventList"></div>
+      </section>
+
+      <section id="kpis">
+        <p class="helper">Resumen de desempe&ntilde;o por colaborador usando los registros sincronizados en Google Sheets.</p>
+        <div class="grid">
+          <label>Desde
+            <input id="kpiDateFrom" type="date" />
+          </label>
+          <label>Hasta
+            <input id="kpiDateTo" type="date" />
+          </label>
+          <label class="wide">Colaborador
+            <select id="kpiCollaborator"></select>
+          </label>
+          <div class="actions wide">
+            <button class="btn" id="refreshKpis">Actualizar KPIs</button>
+            <button class="btn" id="clearKpiFilters">Ver todos</button>
+          </div>
+        </div>
+        <div class="summary-grid" style="margin-top: 18px;">
+          <div class="metric"><strong id="kpiEventCount">0</strong><span>Cantidad de eventos</span></div>
+          <div class="metric"><strong id="kpiParticipationCount">0</strong><span>Participaciones</span></div>
+          <div class="metric"><strong id="kpiLateRate">0%</strong><span>% de tardanzas</span></div>
+          <div class="metric"><strong id="kpiAverageLate">0 min</strong><span>Tiempo promedio tarde</span></div>
+          <div class="metric"><strong id="kpiAverageScore">-</strong><span>Desempe&ntilde;o promedio</span></div>
+          <div class="metric"><strong id="kpiOnTimeRate">0%</strong><span>% a tiempo</span></div>
+          <div class="metric"><strong id="kpiCheckRate">0%</strong><span>% checking</span></div>
+          <div class="metric"><strong id="kpiEvalRate">0%</strong><span>% evaluado</span></div>
+        </div>
+        <div id="kpiDetail"></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="checkDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Self-checking</h3>
+        <button class="btn" id="closeCheck">Cerrar</button>
+      </div>
+      <div class="sign-context">
+        <strong id="checkName">Colaborador</strong>
+        <span id="checkEvent">Evento</span>
+      </div>
+      <div class="grid">
+        <label>Hora de llegada capturada
+          <input id="checkArrival" type="time" disabled />
+        </label>
+        <button class="btn" id="unlockArrival" type="button">Corregir hora</button>
+        <label>Comentario del colaborador
+          <input id="checkComment" placeholder="Comentario opcional" />
+        </label>
+      </div>
+      <label class="wide" style="margin-top: 14px;">Firma
+        <canvas class="signature-pad" id="signaturePad"></canvas>
+      </label>
+      <div class="actions" style="margin-top: 14px;">
+        <button class="btn" id="clearPad">Limpiar firma</button>
+        <button class="btn green" id="saveCheck">Guardar checking</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="evalDialog">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="evalTitle">Evaluación</h3>
+        <button class="btn" id="closeEval">Cerrar</button>
+      </div>
+      <div class="grid">
+        <label>Nombre del colaborador<input id="editName" /></label>
+        <label>Posición en el evento<input id="editPosition" /></label>
+      </div>
+      <div class="score-grid" id="scoreGrid"></div>
+      <div class="actions" style="margin-top: 14px;">
+        <button class="btn primary" id="saveEval">Guardar evaluación</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const storageKey = 'hebreos11AdoracionCheckingV1';
+    const sheetConfigKey = 'hebreos11GoogleSheetEndpointV1';
+    const historyCacheKey = 'hebreos11HistoryCacheV1';
+    const eventSequenceKey = 'hebreos11EventSequenceByDateV1';
+    const googleScriptEndpoint = 'https://script.google.com/macros/s/AKfycbzOuKs5J4A9mt8BZl3cBtzV-YMk6Ymwx8w0KT6gU5VdrV4Nz4wtMsGGz3WHDbusdHLO/exec';
+    const logoPath = 'logo-hebreos-11.png';
+    const metrics = ['Puntualidad', 'Responsabilidad', 'Trabajo en equipo', 'Excelencia', 'Vestimenta', 'Creatividad', 'Respeto', 'Entrega', 'Preparación Previa', 'Conexión espiritual'];
+    const state = { people: [], collaborators: [], history: [], activeId: null, drawing: false, hasStroke: false, logoData: '', eventLocked: false, historyUnlocked: false, currentSection: 'evento' };
+    const headerFields = ['eventName', 'eventType', 'eventDate', 'startTime', 'lateTolerance', 'manager', 'eventInternalId', 'standardPeople'];
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('eventDate').value = today;
+
+    const checkingList = document.getElementById('checkingList');
+    const evaluationList = document.getElementById('evaluationList');
+    const masterList = document.getElementById('masterList');
+    const eventParticipantList = document.getElementById('eventParticipantList');
+    const eventAssignedList = document.getElementById('eventAssignedList');
+    const checkDialog = document.getElementById('checkDialog');
+    const evalDialog = document.getElementById('evalDialog');
+    const canvas = document.getElementById('signaturePad');
+    const ctx = canvas.getContext('2d');
+    const standardRoles = ['Encargado', 'Cantante', 'Músico', 'Guitarrista', 'Bajista', 'Baterista', 'Pianista', 'Coro', 'Sonido', 'Multimedia', 'Danza', 'Director'];
+    const seededCollaboratorGroups = [
+      {
+        roles: ['Encargado'],
+        names: [
+          'Daglin Donel Vasquez Alcantara',
+          'Jose Ignacio Victoriano Hernandez',
+          'Jose Ramon Victoriano Hernandez',
+          'Katty Massiel De Oleo Santos',
+          'Koraynee Macario Liriano',
+          'Luis Roberto Gómez Fernández',
+          'Rosario Gutiérrez',
+          'Samuel Soto',
+          'Yeanny Elizabeth Monegro Santana'
+        ]
+      },
+      {
+        roles: ['Músico', 'Baterista'],
+        names: ['Abel Moran', 'Davis Eliezer Cruz Ramos']
+      },
+      {
+        roles: ['Músico', 'Guitarrista'],
+        names: ['Daglin Donel Vasquez Alcantara', 'Gilberto Cruz Ramos']
+      },
+      {
+        roles: ['Músico', 'Bajista'],
+        names: ['Dioris Lemuel Aracena Vásquez', 'Hiran Alberto Vásquez Severino', 'Thomas Adrián Benzan Tapia']
+      },
+      {
+        roles: ['Músico', 'Pianista'],
+        names: ['Enmanuel García', 'Neftaly', 'Samuel Soto']
+      },
+      {
+        roles: ['Músico'],
+        names: ['Oscar Sebastian Jimenez', 'Ryan Silverio']
+      },
+      {
+        roles: ['Cantante'],
+        names: [
+          'Arantxa Acosta Alonzo',
+          'Carlos Jovanny Batista Estévez',
+          'Dafne Mishelle Aracena Vásquez',
+          'Daglin Donel Vasquez Alcantara',
+          'Desireth Morillo Poché',
+          'Eliezer Figuereo',
+          'Esmeralda Diroche',
+          'Estefany Lopez',
+          'Hanogy Adames Carrasco',
+          'Ismael Diroché',
+          'Iván Armando Feliz Rodríguez',
+          'Jose Ignacio Victoriano Hernandez',
+          'Jose Ramon Victoriano Hernandez',
+          'Julio José Santos Calvo',
+          'Katty Diroche',
+          'Katty Massiel De Oleo Santos',
+          'Koraynee Macario Liriano',
+          'Luis Roberto Gómez Fernández',
+          'Mady Hidekel Piña De Soto',
+          'Manuel Abrahan Núñez Rossís',
+          'Mariam Silfa Antoine',
+          'Mirdalania Altagracia Batista Valdez',
+          'Noemí Antonia Rodríguez Castro',
+          'Nurys Poche',
+          'Oscar Polanco',
+          'Rosario Gutiérrez',
+          'Rosmery Medina',
+          'Sairuby Emiliano Alcántara',
+          'Samuel Soto',
+          'Yenny Elizabeth Monegro Santana'
+        ]
+      }
+    ];
+
+    function uid() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+    function blankScores() { return Object.fromEntries(metrics.map(metric => [metric, 10])); }
+    function average(person) { return Math.round(metrics.reduce((sum, metric) => sum + Number(person.scores[metric] || 0), 0) / metrics.length * 10) / 10; }
+    function getHeader() { return Object.fromEntries(headerFields.map(id => [id, document.getElementById(id).value.trim()])); }
+    function setHeader(data) { headerFields.forEach(id => { if (data[id] !== undefined) document.getElementById(id).value = data[id]; }); }
+    function standardNames() { return document.getElementById('standardPeople').value.split(/\r?\n/).map(name => name.trim()).filter(Boolean); }
+    function byName(a, b) { return a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }); }
+    function searchIncludes(value, query) {
+      const clean = text => String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return clean(value).includes(clean(query));
+    }
+    function formatCode(dateValue = document.getElementById('eventDate').value) {
+      if (!dateValue) return '';
+      const [year, month, day] = dateValue.split('-');
+      return `${day}-${month}-${year}`;
+    }
+    function eventDateKey(dateValue = document.getElementById('eventDate').value) {
+      if (!dateValue) return new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      return dateValue.replace(/-/g, '');
+    }
+    function nextEventId() {
+      const dateKey = eventDateKey();
+      let sequences = {};
+      try { sequences = JSON.parse(localStorage.getItem(eventSequenceKey) || '{}'); } catch { sequences = {}; }
+      const next = Number(sequences[dateKey] || 0) + 1;
+      sequences[dateKey] = next;
+      localStorage.setItem(eventSequenceKey, JSON.stringify(sequences));
+      return `EVT-${dateKey}-${String(next).padStart(3, '0')}`;
+    }
+    function ensureEventId() {
+      const input = document.getElementById('eventInternalId');
+      if (!input.value.trim()) input.value = nextEventId();
+      return input.value.trim();
+    }
+    function saveLocal() {
+      localStorage.setItem(storageKey, JSON.stringify({ header: getHeader(), people: state.people, collaborators: state.collaborators, eventLocked: state.eventLocked }));
+      updateSummary();
+    }
+    function saveSheetEndpoint() {
+      const endpoint = document.getElementById('sheetEndpoint').value.trim();
+      localStorage.setItem(sheetConfigKey, endpoint);
+      setSheetStatus(endpoint ? 'Conexion guardada. Puedes enviar eventos o cargar historico.' : 'Pendiente de conectar Google Sheets.');
+    }
+    function loadLocal() {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        setHeader(data.header || {});
+        state.people = Array.isArray(data.people) ? data.people : [];
+        state.collaborators = Array.isArray(data.collaborators) ? data.collaborators : [];
+        state.eventLocked = !!data.eventLocked;
+      } catch { state.people = []; }
+    }
+    function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char])); }
+
+    function go(sectionId) {
+      if ((sectionId === 'historico' || sectionId === 'kpis') && !state.historyUnlocked) {
+        if (!requestPassword('Escribe el codigo para abrir Historico/KPIs:')) {
+          alert('Codigo incorrecto.');
+          return;
+        }
+        state.historyUnlocked = true;
+      }
+      document.querySelectorAll('section').forEach(section => section.classList.toggle('active', section.id === sectionId));
+      document.querySelectorAll('.step').forEach(step => step.classList.toggle('active', step.dataset.section === sectionId));
+      document.getElementById('sectionTitle').textContent = { evento: 'Evento', lista: 'Colaboradores', checking: 'Checking', evaluacion: 'Evaluación', resumen: 'Resumen y PDF', historico: 'Histórico', kpis: 'KPIs' }[sectionId];
+      document.getElementById('resetAllTop').style.display = ['evento', 'evaluacion'].includes(sectionId) ? 'inline-flex' : 'none';
+      state.currentSection = sectionId;
+      if (sectionId === 'historico') renderHistoryDashboard();
+      if (sectionId === 'kpis') renderKpisDashboard();
+    }
+
+    function prepareRoster() {
+      if (!ensureEventEditable()) return;
+      ensureEventId();
+      addSelectedParticipantsToEvent();
+      renderAll();
+      lockEvent(true);
+      saveLocal();
+      go('checking');
+    }
+    function newPerson(name, estimated, secret) {
+      return { id: uid(), name, estimated, secret: secret || '', position: '', arrival: '', comment: '', scores: blankScores(), signature: '', checkedAt: '', evaluatedAt: '' };
+    }
+    function addCollaborator() {
+      const name = document.getElementById('masterName').value.trim();
+      const secret = document.getElementById('masterSecret').value.trim();
+      if (!name || !secret) return alert('Escribe nombre y código secreto.');
+      const existing = state.collaborators.find(item => item.name.toLowerCase() === name.toLowerCase());
+      if (existing) {
+        existing.secret = secret;
+      } else {
+        state.collaborators.push({ id: uid(), name, secret, active: true });
+      }
+      document.getElementById('masterName').value = '';
+      document.getElementById('masterSecret').value = '';
+      renderAll();
+      saveLocal();
+    }
+    function addMasterToEvent(id) {
+      if (!state.eventLocked) return alert('Primero crea el evento desde la pestaña Evento.');
+      const collaborator = state.collaborators.find(item => item.id === id);
+      if (!collaborator) return;
+      if (state.people.some(person => person.name.toLowerCase() === collaborator.name.toLowerCase())) return alert('Ese colaborador ya está asignado al evento.');
+      state.people.push(newPerson(collaborator.name, true, collaborator.secret));
+      renderAll();
+      saveLocal();
+      go('checking');
+    }
+    function addSelectedParticipantsToEvent() {
+      const selectedIds = [...document.getElementById('eventParticipants').selectedOptions].map(option => option.value);
+      const existing = new Set(state.people.map(person => person.name.toLowerCase()));
+      selectedIds.forEach(id => {
+        const collaborator = state.collaborators.find(item => item.id === id);
+        if (!collaborator || existing.has(collaborator.name.toLowerCase())) return;
+        state.people.push(newPerson(collaborator.name, true, collaborator.secret));
+        existing.add(collaborator.name.toLowerCase());
+      });
+    }
+    function addManual() {
+      if (!state.eventLocked) return alert('Primero crea el evento desde la pestaña Evento.');
+      const name = document.getElementById('manualName').value.trim();
+      const secret = document.getElementById('manualSecret').value.trim();
+      if (!name) return alert('Escribe el nombre del colaborador.');
+      if (!secret) return alert('Asigna un código secreto para ese colaborador.');
+      if (state.people.some(person => person.name.toLowerCase() === name.toLowerCase())) return alert('Ese colaborador ya está asignado al evento.');
+      state.people.push(newPerson(name, false, secret));
+      document.getElementById('manualName').value = '';
+      document.getElementById('manualSecret').value = '';
+      renderAll();
+      saveLocal();
+    }
+    function nextInternalCode() {
+      const nums = state.collaborators.map(item => Number(String(item.internalCode || '').replace(/\D/g, '')) || 0);
+      return `COL-${String(Math.max(0, ...nums) + 1).padStart(3, '0')}`;
+    }
+    function resetCollaboratorForm() {
+      document.getElementById('masterCode').value = nextInternalCode();
+      document.getElementById('masterName').value = '';
+      document.getElementById('masterSecret').value = '';
+      renderRoleOptions([]);
+      document.getElementById('masterName').focus();
+    }
+    function cleanupTestCollaborators() {
+      const testNames = ['lisbeth', 'ana alvarez', 'ana álvarez'];
+      const before = state.collaborators.length;
+      state.collaborators = state.collaborators.filter(item => {
+        const hasCode = !!String(item.internalCode || '').trim();
+        return hasCode || !testNames.includes(normalizedName(item.name));
+      });
+      return state.collaborators.length !== before;
+    }
+    function normalizedName(value) {
+      const aliases = {
+        'yenny elizabeth monegro santana': 'yeanny elizabeth monegro santana'
+      };
+      const normalized = String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+      return aliases[normalized] || normalized;
+    }
+    function seedCollaborators() {
+      let changed = false;
+      seededCollaboratorGroups.forEach(group => {
+        const groupRoles = group.roles || [group.role].filter(Boolean);
+        group.names.forEach(name => {
+          const existing = state.collaborators.find(item => normalizedName(item.name) === normalizedName(name));
+          if (existing) {
+            const roles = collaboratorRoles(existing);
+            const newRoles = groupRoles.filter(role => !roles.includes(role));
+            if (newRoles.length) {
+              existing.roles = [...roles, ...newRoles];
+              existing.canManage = existing.roles.includes('Encargado');
+              changed = true;
+            }
+            if (!existing.internalCode) {
+              existing.internalCode = nextInternalCode();
+              changed = true;
+            }
+            return;
+          }
+          state.collaborators.push({
+            id: uid(),
+            internalCode: nextInternalCode(),
+            name,
+            secret: '0000',
+            roles: groupRoles,
+            canManage: groupRoles.includes('Encargado'),
+            active: true
+          });
+          changed = true;
+        });
+      });
+      return changed;
+    }
+    function renderRoleOptions(selected = []) {
+      const box = document.getElementById('masterRoleOptions');
+      if (!box) return;
+      box.innerHTML = standardRoles.map(role => `
+        <label class="badge neutral" style="cursor:pointer;">
+          <input type="checkbox" value="${escapeHtml(role)}" ${selected.includes(role) ? 'checked' : ''} />
+          ${escapeHtml(role)}
+        </label>
+      `).join('');
+      box.querySelectorAll('input').forEach(input => input.addEventListener('change', syncRoleOptions));
+      syncRoleOptions();
+    }
+    function syncRoleOptions() {
+      const hidden = document.getElementById('masterRoles');
+      if (!hidden) return;
+      hidden.value = [...document.querySelectorAll('#masterRoleOptions input:checked')].map(input => input.value).join(',');
+      document.getElementById('masterCanManage').value = hidden.value.split(',').includes('Encargado') ? 'true' : '';
+    }
+    function addCollaborator() {
+      const internalCode = document.getElementById('masterCode').value.trim() || nextInternalCode();
+      const name = document.getElementById('masterName').value.trim();
+      const secret = document.getElementById('masterSecret').value.trim();
+      syncRoleOptions();
+      const roles = document.getElementById('masterRoles').value.split(',').map(role => role.trim()).filter(Boolean);
+      const canManage = roles.includes('Encargado');
+      if (!name || !secret) return alert('Escribe nombre y código secreto.');
+      const existing = state.collaborators.find(item => (item.internalCode || '').toLowerCase() === internalCode.toLowerCase());
+      if (existing) {
+        existing.name = name;
+        existing.secret = secret;
+        existing.roles = roles;
+        existing.canManage = canManage;
+        existing.active = existing.active !== false;
+      } else {
+        state.collaborators.push({ id: uid(), internalCode, name, secret, roles, canManage, active: true });
+      }
+      document.getElementById('masterCode').value = nextInternalCode();
+      document.getElementById('masterName').value = '';
+      document.getElementById('masterSecret').value = '';
+      renderRoleOptions([]);
+      renderAll();
+      saveLocal();
+    }
+    function renderManagerOptions() {
+      const manager = document.getElementById('manager');
+      if (!manager) return;
+      const current = manager.value;
+      const managers = [...state.collaborators].filter(item => item.active !== false && collaboratorRoles(item).includes('Encargado')).sort(byName);
+      manager.innerHTML = '<option value="">Selecciona encargado</option>' + managers.map(item => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)} (${escapeHtml(item.internalCode || 'sin código')})</option>`).join('');
+      manager.value = current;
+    }
+    function renderAssignedParticipants() {
+      if (!eventAssignedList) return;
+      eventAssignedList.innerHTML = '';
+      const assigned = [...state.people].sort(byName);
+      if (!assigned.length) {
+        eventAssignedList.innerHTML = '<p class="helper">Todavía no hay participantes asignados.</p>';
+        return;
+      }
+      assigned.forEach(person => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `<div><strong>${escapeHtml(person.name)}</strong><small>${escapeHtml(person.internalCode || 'No listado')} · ${escapeHtml(person.eventRole || 'Sin cargo')}</small></div><span class="badge ${person.estimated ? 'done' : 'neutral'}">${person.estimated ? 'Listado' : 'No listado'}</span>`;
+        eventAssignedList.appendChild(row);
+      });
+    }
+    function renderEventParticipantOptions() {
+      if (!eventParticipantList) return;
+      eventParticipantList.innerHTML = '';
+      const query = document.getElementById('eventParticipantSearch')?.value || '';
+      const inEvent = new Set(state.people.map(person => person.internalCode || person.name.toLowerCase()));
+      const candidates = [...state.collaborators]
+        .filter(item => item.active !== false)
+        .sort(byName)
+        .filter(item => !inEvent.has(item.internalCode || item.name.toLowerCase()))
+        .filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query));
+      if (!candidates.length) {
+        eventParticipantList.innerHTML = '<p class="helper">No hay colaboradores para asignar con esa búsqueda.</p>';
+        return;
+      }
+      candidates.forEach(item => {
+        const roles = collaboratorRoles(item);
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `<div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.internalCode || 'Sin código')} · ${escapeHtml(roles.join(', ') || 'Sin cargos')}</small></div><label>Cargo en este evento<select data-role-for="${item.id}"><option value="">Sin cargo</option>${roles.map(role => `<option value="${escapeHtml(role)}">${escapeHtml(role)}</option>`).join('')}</select></label><button class="btn compact green" data-event-add="${item.id}">Agregar</button>`;
+        eventParticipantList.appendChild(row);
+      });
+    }
+    function renderCollaborators() {
+      renderManagerOptions();
+      renderEventParticipantOptions();
+      renderAssignedParticipants();
+      masterList.innerHTML = '';
+      const query = document.getElementById('masterSearch')?.value || '';
+      const collaborators = [...state.collaborators].sort(byName).filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query));
+      if (!collaborators.length) masterList.innerHTML = '<p class="helper">No hay colaboradores para mostrar.</p>';
+      collaborators.forEach((collaborator, index) => {
+        const inEvent = state.people.some(person => person.internalCode && person.internalCode === collaborator.internalCode);
+        const inactive = collaborator.active === false;
+        const row = document.createElement('div');
+        row.className = `row ${inactive ? 'inactive' : ''}`;
+        row.innerHTML = `<div><strong>${index + 1}. ${escapeHtml(collaborator.name)}</strong><small>${escapeHtml(collaborator.internalCode || 'Sin código')} · ${escapeHtml(collaboratorRoles(collaborator).join(', ') || 'Sin cargos')} · ${inactive ? 'Inactivo' : 'Activo'}</small></div><div class="badges"><span class="badge ${inEvent ? 'done' : 'neutral'}">${inEvent ? 'Asignado' : 'General'}</span></div><div class="actions"><button class="btn compact" data-master-edit="${collaborator.id}">Editar</button><button class="btn compact green" data-master-add="${collaborator.id}">Asignar</button><button class="btn compact danger" data-master-toggle="${collaborator.id}">${inactive ? 'Activar' : 'Inactivar'}</button></div>`;
+        masterList.appendChild(row);
+      });
+    }
+
+    function requestPassword(message) {
+      return prompt(message || 'Código de autorización') === '1234';
+    }
+    function ensureEventEditable() {
+      if (!state.eventLocked) return true;
+      if (!requestPassword('Evento bloqueado. Escribe el código para editar:')) return false;
+      lockEvent(false);
+      return true;
+    }
+    function lockEvent(locked) {
+      state.eventLocked = locked;
+      applyEventLock();
+    }
+    function applyEventLock() {
+      headerFields.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.disabled = state.eventLocked;
+      });
+      const note = document.getElementById('eventLockNote');
+      if (note) note.classList.toggle('show', state.eventLocked);
+      const prepare = document.getElementById('prepareRoster');
+      if (prepare) prepare.textContent = state.eventLocked ? 'Evento creado' : 'Crear evento y preparar checking';
+    }
+
+    function onTimeStatus(person) {
+      const start = document.getElementById('startTime').value;
+      if (!start || !person.arrival) return { label: 'Pendiente', className: 'neutral', onTime: null };
+      const tolerance = Number(document.getElementById('lateTolerance').value || 0);
+      const startMinutes = toMinutes(start) + tolerance;
+      const arrivalMinutes = toMinutes(person.arrival);
+      const onTime = arrivalMinutes <= startMinutes;
+      return { label: onTime ? 'A tiempo' : 'Tarde', className: onTime ? 'done' : 'late', onTime };
+    }
+    function toMinutes(value) {
+      const [hour, minute] = value.split(':').map(Number);
+      return hour * 60 + minute;
+    }
+    function personHasCheck(person) {
+      return !!(person.signature || person.checkedAt || person.checked === 'Si');
+    }
+
+    function renderAll() {
+      applyEventLock();
+      renderCollaborators();
+      renderChecking();
+      renderCheckingCandidates();
+      renderEvaluation();
+      updateSummary();
+    }
+    function renderCollaborators() {
+      renderEventParticipantOptions();
+      masterList.innerHTML = '';
+      const query = document.getElementById('masterSearch')?.value || '';
+      const collaborators = [...state.collaborators].sort(byName).filter(collaborator => searchIncludes(collaborator.name, query));
+      if (!collaborators.length) masterList.innerHTML = '<p class="helper">No hay colaboradores para mostrar.</p>';
+      collaborators.forEach((collaborator, index) => {
+        const inEvent = state.people.some(person => person.name.toLowerCase() === collaborator.name.toLowerCase());
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div>
+            <strong>${index + 1}. ${escapeHtml(collaborator.name)}</strong>
+            <small>Código asignado · ${inEvent ? 'Ya está asignado al evento' : 'Disponible para asignar'}</small>
+          </div>
+          <div class="badges">
+            <span class="badge ${inEvent ? 'done' : 'neutral'}">${inEvent ? 'Asignado' : 'General'}</span>
+          </div>
+          <div class="actions">
+            <button class="btn compact green" data-master-add="${collaborator.id}">Asignar al evento</button>
+            <button class="btn compact danger" data-master-remove="${collaborator.id}">Quitar</button>
+          </div>
+        `;
+        masterList.appendChild(row);
+      });
+    }
+    function renderEventParticipantOptions() {
+      const select = document.getElementById('eventParticipants');
+      if (!select) return;
+      const selected = new Set([...select.selectedOptions].map(option => option.value));
+      const query = document.getElementById('eventParticipantSearch')?.value || '';
+      const inEvent = new Set(state.people.map(person => person.name.toLowerCase()));
+      select.innerHTML = [...state.collaborators]
+        .sort(byName)
+        .filter(collaborator => !inEvent.has(collaborator.name.toLowerCase()))
+        .filter(collaborator => searchIncludes(collaborator.name, query))
+        .map(collaborator => `<option value="${collaborator.id}" ${selected.has(collaborator.id) ? 'selected' : ''}>${escapeHtml(collaborator.name)}</option>`)
+        .join('');
+    }
+    function renderChecking() {
+      checkingList.innerHTML = '';
+      if (!state.people.length) checkingList.innerHTML = '<p class="helper">Todavía no hay listado. Prepáralo desde la pestaña Evento.</p>';
+      [...state.people].sort(byName).forEach((person, index) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div>
+            <strong>${index + 1}. ${escapeHtml(person.name)}</strong>
+            <small>${person.estimated ? 'Listado' : 'No listado'} · Llegada: ${escapeHtml(person.arrival || 'pendiente')}</small>
+          </div>
+          <div class="badges">
+            <span class="badge ${personHasCheck(person) ? 'done' : ''}">${personHasCheck(person) ? 'Registrado' : 'Pendiente'}</span>
+          </div>
+          <div class="actions">
+            <button class="btn compact green" data-check="${person.id}">${personHasCheck(person) ? 'Rehacer checking' : 'Hacer checking'}</button>
+            <button class="btn compact danger" data-remove="${person.id}">Quitar</button>
+          </div>
+        `;
+        checkingList.appendChild(row);
+      });
+    }
+    function renderEvaluation() {
+      evaluationList.innerHTML = '';
+      const checkedPeople = state.people.filter(personHasCheck);
+      if (!checkedPeople.length) evaluationList.innerHTML = '<p class="helper">Cuando los colaboradores hagan checking, aparecerán aquí para evaluación.</p>';
+      checkedPeople.sort(byName).forEach((person, index) => {
+        const status = onTimeStatus(person);
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div>
+            <strong>${index + 1}. ${escapeHtml(person.name)}</strong>
+            <small>${status.label} · Promedio: ${average(person)} · ${escapeHtml(person.comment || 'Sin comentario')}</small>
+          </div>
+          <div class="badges">
+            <span class="badge ${person.evaluatedAt ? 'done' : 'neutral'}">${person.evaluatedAt ? 'Evaluado' : 'Por evaluar'}</span>
+          </div>
+          <button class="btn compact primary" data-eval="${person.id}">Evaluar</button>
+        `;
+        evaluationList.appendChild(row);
+      });
+    }
+    function updateSummary() {
+      const total = state.people.length;
+      const checked = state.people.filter(personHasCheck).length;
+      const evaluated = state.people.filter(person => person.evaluatedAt).length;
+      const statusList = state.people.map(onTimeStatus);
+      const onTime = statusList.filter(status => status.onTime === true).length;
+      const late = statusList.filter(status => status.onTime === false).length;
+      document.getElementById('totalPeople').textContent = total;
+      document.getElementById('checkedPeople').textContent = checked;
+      document.getElementById('onTimePeople').textContent = onTime;
+      document.getElementById('latePeople').textContent = late;
+      document.getElementById('progressCount').textContent = `${checked}/${total}`;
+      document.getElementById('sideChecked').textContent = checked;
+      document.getElementById('sideEvaluated').textContent = evaluated;
+      document.getElementById('progressBar').style.width = `${total ? Math.round(checked / total * 100) : 0}%`;
+      document.getElementById('autoCode').value = formatCode();
+      document.getElementById('pdfNotice').textContent = total ? 'El PDF incluirá encabezado institucional, resumen y anexo de firmas.' : 'Prepara el listado y registra colaboradores para generar el documento final.';
+    }
+
+    function setSheetStatus(message) {
+      const status = document.getElementById('sheetStatus');
+      if (status) status.textContent = message;
+    }
+    function getSheetEndpoint() {
+      return googleScriptEndpoint.trim();
+    }
+    function collaboratorForPerson(person) {
+      return state.collaborators.find(item => item.internalCode && item.internalCode === person.internalCode)
+        || state.collaborators.find(item => normalizedName(item.name) === normalizedName(person.name));
+    }
+    function buildHistoryRows(people = state.people) {
+      const header = getHeader();
+      const eventCode = formatCode(header.eventDate);
+      const eventId = header.eventInternalId || ensureEventId();
+      return [...people]
+        .map(person => {
+          const collaborator = collaboratorForPerson(person) || {};
+          const status = onTimeStatus(person);
+          return {
+            eventId,
+            eventCode,
+            eventName: header.eventName || '',
+            eventType: header.eventType || '',
+            eventDate: header.eventDate || '',
+            startTime: header.startTime || '',
+            lateTolerance: header.lateTolerance || '5',
+            manager: header.manager || '',
+            collaboratorCode: person.internalCode || collaborator.internalCode || '',
+            collaboratorName: person.name,
+            eventRole: person.eventRole || person.position || '',
+            collaboratorRoles: collaboratorRoles(collaborator).join(', '),
+            listedStatus: person.estimated ? 'Listado' : 'No listado',
+            arrival: person.arrival || '',
+            checked: personHasCheck(person) ? 'Si' : 'No',
+            onTime: status.onTime === null ? '' : (status.onTime ? 'Si' : 'No'),
+            punctualityStatus: status.label,
+            averageScore: person.evaluatedAt ? average(person) : '',
+            comment: person.comment || '',
+            checkedAt: person.checkedAt || '',
+            evaluatedAt: person.evaluatedAt || '',
+            scores: JSON.stringify(person.scores || {})
+          };
+        });
+    }
+    function saveSheetEndpoint() {
+      const endpoint = getSheetEndpoint();
+      localStorage.setItem(sheetConfigKey, endpoint);
+      setSheetStatus(endpoint ? 'Conexion guardada. Puedes enviar eventos o cargar historico.' : 'Pendiente de conectar Google Sheets.');
+    }
+    function syncToGoogleSheets() {
+      const endpoint = getSheetEndpoint();
+      if (!endpoint) return alert('Falta configurar internamente la URL del Google Apps Script.');
+      const rows = buildHistoryRows();
+      if (!rows.length) return alert('No hay registros con checking o evaluacion para enviar.');
+      sendRowsToGoogleSheets(rows, `Evento enviado a Google Sheets: ${rows.length} registro(s).`);
+    }
+    function syncPersonToGoogleSheets(person, successMessage) {
+      const endpoint = getSheetEndpoint();
+      if (!endpoint) {
+        setSheetStatus('Guardado localmente. Falta configurar Google Sheets dentro de la app.');
+        return;
+      }
+      const rows = buildHistoryRows([person]);
+      if (!rows.length) return;
+      sendRowsToGoogleSheets(rows, successMessage || `Registro sincronizado en Google Sheets: ${person.name}.`);
+    }
+    function sendRowsToGoogleSheets(rows, successMessage) {
+      const endpoint = getSheetEndpoint();
+      const iframeName = `sheetSync${Date.now()}`;
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = endpoint;
+      form.target = iframeName;
+      form.style.display = 'none';
+      [['action', 'append'], ['payload', JSON.stringify({ rows })]].forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      form.submit();
+      form.remove();
+      setTimeout(() => iframe.remove(), 5000);
+      setSheetStatus(successMessage);
+    }
+    function loadHistoryFromGoogleSheets() {
+      const endpoint = getSheetEndpoint();
+      if (!endpoint) return alert('Falta configurar internamente la URL del Google Apps Script.');
+      const callback = `historyCallback_${Date.now()}`;
+      const separator = endpoint.includes('?') ? '&' : '?';
+      const script = document.createElement('script');
+      const timeout = setTimeout(() => {
+        delete window[callback];
+        script.remove();
+        setSheetStatus('No se pudo cargar el historico. Revisa la URL publicada del Apps Script.');
+      }, 15000);
+      window[callback] = data => {
+        clearTimeout(timeout);
+        script.remove();
+        delete window[callback];
+        state.history = Array.isArray(data.rows) ? data.rows : [];
+        localStorage.setItem(historyCacheKey, JSON.stringify(state.history));
+        setSheetStatus(`Historico cargado: ${state.history.length} registro(s).`);
+        renderHistoryDashboard();
+        renderKpisDashboard();
+      };
+      script.src = `${endpoint}${separator}action=list&callback=${callback}&t=${Date.now()}`;
+      document.body.appendChild(script);
+      setSheetStatus('Cargando historico desde Google Sheets...');
+    }
+    function groupedHistoryEvents() {
+      const map = new Map();
+      state.history.forEach(row => {
+        const eventId = row.eventId || 'Sin ID';
+        if (!map.has(eventId)) {
+          map.set(eventId, {
+            eventId,
+            eventName: row.eventName || '',
+            eventType: row.eventType || '',
+            eventDate: row.eventDate || '',
+            manager: row.manager || '',
+            rows: []
+          });
+        }
+        map.get(eventId).rows.push(row);
+      });
+      return [...map.values()].sort((a, b) => String(b.eventDate).localeCompare(String(a.eventDate)) || a.eventId.localeCompare(b.eventId));
+    }
+    function renderHistoryEvents() {
+      const list = document.getElementById('historyEventList');
+      if (!list) return;
+      const query = document.getElementById('historyEventSearch')?.value || '';
+      const events = groupedHistoryEvents().filter(event => [event.eventId, event.eventName, event.eventType, event.eventDate, event.manager].some(value => searchIncludes(value, query)));
+      if (!events.length) {
+        list.innerHTML = '<p class="helper">No hay eventos anteriores para mostrar.</p>';
+        return;
+      }
+      list.innerHTML = '';
+      events.forEach(event => {
+        const checked = event.rows.filter(row => row.checked === 'Si').length;
+        const evaluated = event.rows.filter(row => row.evaluatedAt || row.averageScore).length;
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div>
+            <strong>${escapeHtml(event.eventId)} · ${escapeHtml(event.eventName || event.eventType || 'Evento')}</strong>
+            <small>${escapeHtml(event.eventDate || '-')} · ${escapeHtml(event.manager || 'Sin encargado')} · ${event.rows.length} participantes · ${checked} checking · ${evaluated} evaluados</small>
+          </div>
+          <span class="badge neutral">${escapeHtml(event.eventType || 'Evento')}</span>
+          <button class="btn compact primary" data-restore-event="${escapeHtml(event.eventId)}">Abrir evento</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+    function restoreHistoryEvent(eventId) {
+      if (!state.historyUnlocked && !requestPassword('Escribe el codigo para restaurar evento:')) return alert('Codigo incorrecto.');
+      const rows = state.history.filter(row => row.eventId === eventId);
+      if (!rows.length) return alert('No encontré ese evento en el historico cargado.');
+      if (state.people.length && !confirm('Esto reemplazara el evento actual en pantalla. El historico guardado no se borra. ¿Continuar?')) return;
+      const first = rows[0];
+      setHeader({
+        eventName: first.eventName || '',
+        eventType: first.eventType || 'Manual',
+        eventDate: first.eventDate || today,
+        startTime: first.startTime || '',
+        lateTolerance: document.getElementById('lateTolerance').value || 5,
+        manager: first.manager || '',
+        eventInternalId: first.eventId || '',
+        standardPeople: ''
+      });
+      state.people = rows.map(row => {
+        let scores = blankScores();
+        try { scores = row.scores ? { ...scores, ...JSON.parse(row.scores) } : scores; } catch {}
+        const collaborator = state.collaborators.find(item => item.internalCode && item.internalCode === row.collaboratorCode)
+          || state.collaborators.find(item => normalizedName(item.name) === normalizedName(row.collaboratorName));
+        return {
+          id: uid(),
+          name: row.collaboratorName || '',
+          estimated: row.listedStatus !== 'No listado',
+          secret: collaborator?.secret || '0000',
+          internalCode: row.collaboratorCode || '',
+          eventRole: row.eventRole || '',
+          position: row.eventRole || '',
+          arrival: row.arrival || '',
+          comment: row.comment || '',
+          scores,
+          signature: '',
+          checkedAt: row.checkedAt || '',
+          evaluatedAt: row.evaluatedAt || '',
+          checked: row.checked || ''
+        };
+      }).sort(byName);
+      state.eventLocked = true;
+      saveLocal();
+      renderAll();
+      go('evento');
+      alert(`Evento ${eventId} restaurado. Puedes continuar corrigiendo o evaluando.`);
+    }
+    function renderHistoryDashboard() {
+      const select = document.getElementById('historyCollaborator');
+      const detail = document.getElementById('historyDetail');
+      if (!select || !detail) return;
+      if (!state.historyUnlocked) {
+        select.innerHTML = '';
+        detail.innerHTML = '<p class="helper">Histórico protegido. Abre esta pestaña con el código autorizado.</p>';
+        document.getElementById('historyEventList').innerHTML = '';
+        return;
+      }
+      renderHistoryEvents();
+      const rows = [...state.history];
+      const names = [...new Set(rows.map(row => row.collaboratorName).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+      const previous = select.value;
+      select.innerHTML = names.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      if (names.includes(previous)) select.value = previous;
+      const selected = select.value || names[0] || '';
+      if (selected) select.value = selected;
+      const personRows = rows.filter(row => row.collaboratorName === selected);
+      const late = personRows.filter(row => row.onTime === 'No' || row.punctualityStatus === 'Tarde').length;
+      const onTimeCount = personRows.filter(row => row.onTime === 'Si' || row.punctualityStatus === 'A tiempo').length;
+      const averages = personRows.map(row => Number(row.averageScore)).filter(value => !Number.isNaN(value) && value > 0);
+      const avg = averages.length ? Math.round(averages.reduce((sum, value) => sum + value, 0) / averages.length * 10) / 10 : '-';
+      document.getElementById('historyEvents').textContent = personRows.length;
+      document.getElementById('historyOnTime').textContent = personRows.length ? `${Math.round(onTimeCount / personRows.length * 100)}%` : '0%';
+      document.getElementById('historyLate').textContent = late;
+      document.getElementById('historyAverage').textContent = avg;
+      if (!rows.length) {
+        detail.innerHTML = '<p class="helper">Todavia no hay historico cargado.</p>';
+        return;
+      }
+      if (!personRows.length) {
+        detail.innerHTML = '<p class="helper">Selecciona un colaborador para ver su historico.</p>';
+        return;
+      }
+      detail.innerHTML = `<table class="mini-table">
+        <thead><tr><th>Fecha</th><th>Evento</th><th>Cargo</th><th>Puntualidad</th><th>Promedio</th><th>Comentario</th></tr></thead>
+        <tbody>${personRows.sort((a, b) => String(b.eventDate).localeCompare(String(a.eventDate))).map(row => `
+          <tr>
+            <td>${escapeHtml(row.eventDate || '-')}</td>
+            <td>${escapeHtml(row.eventName || row.eventType || '-')}</td>
+            <td>${escapeHtml(row.eventRole || '-')}</td>
+            <td>${escapeHtml(row.punctualityStatus || '-')}</td>
+            <td>${escapeHtml(row.averageScore || '-')}</td>
+            <td>${escapeHtml(row.comment || '-')}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>`;
+    }
+
+    function renderHistoryDashboard() {
+      if (!state.historyUnlocked) {
+        document.getElementById('historyEventList').innerHTML = '';
+        return;
+      }
+      renderHistoryEvents();
+    }
+    function filteredKpiRows() {
+      const from = document.getElementById('kpiDateFrom')?.value || '';
+      const to = document.getElementById('kpiDateTo')?.value || '';
+      const collaborator = document.getElementById('kpiCollaborator')?.value || '';
+      return [...state.history].filter(row => {
+        const date = row.eventDate || '';
+        if (from && date < from) return false;
+        if (to && date > to) return false;
+        if (collaborator && row.collaboratorName !== collaborator) return false;
+        return true;
+      });
+    }
+    function lateMinutes(row) {
+      if (!row.startTime || !row.arrival) return 0;
+      const tolerance = Number(row.lateTolerance || 5);
+      return Math.max(0, toMinutes(row.arrival) - (toMinutes(row.startTime) + tolerance));
+    }
+    function renderKpisDashboard() {
+      const select = document.getElementById('kpiCollaborator');
+      const detail = document.getElementById('kpiDetail');
+      if (!select || !detail) return;
+      if (!state.historyUnlocked) {
+        select.innerHTML = '';
+        detail.innerHTML = '<p class="helper">KPIs protegidos. Abre esta pestaña con el código autorizado.</p>';
+        return;
+      }
+      const rows = [...state.history];
+      const names = [...new Set(rows.map(row => row.collaboratorName).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+      const previous = select.value;
+      select.innerHTML = '<option value="">Todos los colaboradores</option>' + names.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
+      if ([...select.options].some(option => option.value === previous)) select.value = previous;
+      const kpiRows = filteredKpiRows();
+      const lateRows = kpiRows.filter(row => row.onTime === 'No' || row.punctualityStatus === 'Tarde');
+      const onTimeCount = kpiRows.filter(row => row.onTime === 'Si' || row.punctualityStatus === 'A tiempo').length;
+      const checkedCount = kpiRows.filter(row => row.checked === 'Si').length;
+      const evaluatedCount = kpiRows.filter(row => row.evaluatedAt || row.averageScore).length;
+      const averages = kpiRows.map(row => Number(row.averageScore)).filter(value => !Number.isNaN(value) && value > 0);
+      const avg = averages.length ? Math.round(averages.reduce((sum, value) => sum + value, 0) / averages.length * 10) / 10 : '-';
+      const eventCount = new Set(kpiRows.map(row => row.eventId).filter(Boolean)).size;
+      const avgLate = lateRows.length ? Math.round(lateRows.reduce((sum, row) => sum + lateMinutes(row), 0) / lateRows.length) : 0;
+      document.getElementById('kpiEventCount').textContent = eventCount;
+      document.getElementById('kpiParticipationCount').textContent = kpiRows.length;
+      document.getElementById('kpiLateRate').textContent = kpiRows.length ? `${Math.round(lateRows.length / kpiRows.length * 100)}%` : '0%';
+      document.getElementById('kpiAverageLate').textContent = `${avgLate} min`;
+      document.getElementById('kpiAverageScore').textContent = avg;
+      document.getElementById('kpiOnTimeRate').textContent = kpiRows.length ? `${Math.round(onTimeCount / kpiRows.length * 100)}%` : '0%';
+      document.getElementById('kpiCheckRate').textContent = kpiRows.length ? `${Math.round(checkedCount / kpiRows.length * 100)}%` : '0%';
+      document.getElementById('kpiEvalRate').textContent = kpiRows.length ? `${Math.round(evaluatedCount / kpiRows.length * 100)}%` : '0%';
+      if (!rows.length) {
+        detail.innerHTML = '<p class="helper">Todavia no hay historico cargado. Usa Actualizar KPIs para leer Google Sheets.</p>';
+        return;
+      }
+      if (!kpiRows.length) {
+        detail.innerHTML = '<p class="helper">No hay registros para esos filtros.</p>';
+        return;
+      }
+      const byCollaborator = [...new Set(kpiRows.map(row => row.collaboratorName).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
+        .map(name => {
+          const personRows = kpiRows.filter(row => row.collaboratorName === name);
+          const personLate = personRows.filter(row => row.onTime === 'No' || row.punctualityStatus === 'Tarde');
+          const personAvgScores = personRows.map(row => Number(row.averageScore)).filter(value => !Number.isNaN(value) && value > 0);
+          const personAvg = personAvgScores.length ? Math.round(personAvgScores.reduce((sum, value) => sum + value, 0) / personAvgScores.length * 10) / 10 : '-';
+          const personAvgLate = personLate.length ? Math.round(personLate.reduce((sum, row) => sum + lateMinutes(row), 0) / personLate.length) : 0;
+          return { name, count: personRows.length, events: new Set(personRows.map(row => row.eventId).filter(Boolean)).size, late: personLate.length, lateRate: personRows.length ? Math.round(personLate.length / personRows.length * 100) : 0, avgLate: personAvgLate, avg: personAvg };
+        });
+      detail.innerHTML = `<table class="mini-table">
+        <thead><tr><th>Colaborador</th><th>Eventos</th><th>Participaciones</th><th>Tardanzas</th><th>% tardanza</th><th>Promedio tarde</th><th>Desempeño</th></tr></thead>
+        <tbody>${byCollaborator.map(row => `
+          <tr>
+            <td>${escapeHtml(row.name)}</td>
+            <td>${row.events}</td>
+            <td>${row.count}</td>
+            <td>${row.late}</td>
+            <td>${row.lateRate}%</td>
+            <td>${row.avgLate} min</td>
+            <td>${escapeHtml(row.avg)}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>`;
+    }
+
+    function openCheck(id) {
+      const person = state.people.find(item => item.id === id);
+      if (!person) return;
+      if (!person.secret) return alert('Este colaborador no tiene código secreto asignado.');
+      const code = prompt('Código de validación de identidad:');
+      if (code !== person.secret) return alert('Código incorrecto.');
+      state.activeId = id;
+      state.hasStroke = !!person.signature;
+      document.getElementById('checkName').textContent = person.name;
+      document.getElementById('checkEvent').textContent = `${document.getElementById('eventName').value || 'Evento sin nombre'} · ${document.getElementById('eventDate').value || 'Sin fecha'}`;
+      const arrivalInput = document.getElementById('checkArrival');
+      arrivalInput.disabled = true;
+      arrivalInput.dataset.unlocked = 'false';
+      arrivalInput.value = person.arrival || currentTime();
+      document.getElementById('checkComment').value = person.comment || '';
+      checkDialog.showModal();
+      setTimeout(() => {
+        resizeCanvas();
+        if (person.signature) {
+          const img = new Image();
+          img.onload = () => ctx.drawImage(img, 0, 0, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height);
+          img.src = person.signature;
+        }
+      }, 40);
+    }
+    function currentTime() {
+      const now = new Date();
+      return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    }
+    function saveCheck() {
+      if (!state.hasStroke) return alert('Firma en el recuadro antes de guardar.');
+      const person = state.people.find(item => item.id === state.activeId);
+      if (!person) return;
+      const arrivalInput = document.getElementById('checkArrival');
+      person.arrival = arrivalInput.dataset.unlocked === 'true' ? arrivalInput.value : currentTime();
+      person.comment = document.getElementById('checkComment').value.trim();
+      person.signature = canvasToJpeg();
+      person.checkedAt = new Date().toISOString();
+      renderAll();
+      saveLocal();
+      syncPersonToGoogleSheets(person, `Checking sincronizado en Google Sheets: ${person.name}.`);
+      checkDialog.close();
+    }
+
+    function openEval(id) {
+      const person = state.people.find(item => item.id === id);
+      if (!person) return;
+      state.activeId = id;
+      document.getElementById('evalTitle').textContent = `Evaluación de ${person.name}`;
+      document.getElementById('editName').value = person.name;
+      document.getElementById('editPosition').value = person.position;
+      document.getElementById('scoreGrid').innerHTML = metrics.map(metric => `
+        <div class="range-line">
+          <span>${metric}</span>
+          <output>${person.scores[metric] || 10}</output>
+          <input data-score="${metric}" type="range" min="1" max="10" value="${person.scores[metric] || 10}" />
+        </div>
+      `).join('');
+      evalDialog.showModal();
+    }
+    function saveEval() {
+      const person = state.people.find(item => item.id === state.activeId);
+      if (!person) return;
+      person.name = document.getElementById('editName').value.trim() || person.name;
+      person.position = document.getElementById('editPosition').value.trim();
+      document.querySelectorAll('[data-score]').forEach(input => { person.scores[input.dataset.score] = Number(input.value); });
+      person.evaluatedAt = new Date().toISOString();
+      renderAll();
+      saveLocal();
+      syncPersonToGoogleSheets(person, `Evaluacion sincronizada en Google Sheets: ${person.name}.`);
+      evalDialog.close();
+    }
+
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * ratio;
+      canvas.height = rect.height * ratio;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#111827';
+      ctx.clearRect(0, 0, rect.width, rect.height);
+    }
+    function point(event) {
+      const rect = canvas.getBoundingClientRect();
+      const touch = event.touches ? event.touches[0] : event;
+      return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+    }
+    function startDraw(event) { event.preventDefault(); state.drawing = true; state.hasStroke = true; const p = point(event); ctx.beginPath(); ctx.moveTo(p.x, p.y); }
+    function draw(event) { if (!state.drawing) return; event.preventDefault(); const p = point(event); ctx.lineTo(p.x, p.y); ctx.stroke(); }
+    function stopDraw() { state.drawing = false; }
+    function canvasToJpeg() {
+      const sourceRect = canvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      const temp = document.createElement('canvas');
+      temp.width = 900;
+      temp.height = 320;
+      const tempCtx = temp.getContext('2d');
+      tempCtx.fillStyle = '#ffffff';
+      tempCtx.fillRect(0, 0, temp.width, temp.height);
+      tempCtx.drawImage(canvas, 0, 0, sourceRect.width * ratio, sourceRect.height * ratio, 0, 0, temp.width, temp.height);
+      return temp.toDataURL('image/jpeg', 0.86);
+    }
+    function loadImageData(src, width = 240, height = 240) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          const temp = document.createElement('canvas');
+          temp.width = width;
+          temp.height = height;
+          const tctx = temp.getContext('2d');
+          tctx.fillStyle = '#ffffff';
+          tctx.fillRect(0, 0, width, height);
+          const ratio = Math.min(width / img.width, height / img.height);
+          const w = img.width * ratio;
+          const h = img.height * ratio;
+          tctx.drawImage(img, (width - w) / 2, (height - h) / 2, w, h);
+          resolve(temp.toDataURL('image/jpeg', 0.86));
+        };
+        img.onerror = () => resolve('');
+        img.src = src;
+      });
+    }
+
+    function generatePdf() {
+      const header = getHeader();
+      const code = formatCode(header.eventDate);
+      const rows = [...state.people].sort(byName).map((person, index) => {
+        const status = onTimeStatus(person);
+        return `<tr>
+          <td>${index + 1}</td>
+          <td>${escapeHtml(person.name)}</td>
+          <td>${escapeHtml(status.label)}</td>
+          <td>${person.evaluatedAt ? average(person) : '-'}</td>
+          <td>${escapeHtml(person.comment || '-')}</td>
+          <td>${person.signature ? 'Si' : 'No'}</td>
+        </tr>`;
+      }).join('');
+      const signedPeople = [...state.people].filter(person => person.signature).sort(byName);
+      const signatures = signedPeople.map((person, index) => `
+        <div class="sig">
+          <div>
+            <strong>${index + 1}. ${escapeHtml(person.name)}</strong>
+            <p>Checking: ${person.signature ? 'Si' : 'No'}</p>
+            <p>${person.checkedAt ? new Date(person.checkedAt).toLocaleString() : 'Pendiente de firma'}</p>
+          </div>
+          <img src="${person.signature}" alt="Firma de ${escapeHtml(person.name)}" />
+        </div>
+      `).join('');
+      const report = `<!doctype html><html><head><meta charset="utf-8"><title>Reporte ${escapeHtml(code || '')}</title>
+        <style>
+          @page { size: letter landscape; margin: 14mm; }
+          body { font-family: Arial, Helvetica, sans-serif; color: #1f2937; }
+          header { display: grid; grid-template-columns: 76px 1fr; gap: 16px; align-items: center; border-bottom: 4px solid #f5a313; padding-bottom: 12px; margin-bottom: 18px; }
+          header img { width: 70px; height: 70px; object-fit: contain; }
+          h1 { margin: 0; color: #0b2d52; font-size: 24px; }
+          h2 { margin: 4px 0 0; color: #f5a313; font-size: 17px; }
+          .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0 18px; font-size: 12px; }
+          .meta div { border: 1px solid #d8dee8; padding: 8px; border-radius: 6px; }
+          table { width: 100%; border-collapse: collapse; font-size: 11px; }
+          th { background: #f5a313; color: #111827; }
+          th, td { border: 1px solid #1f2937; padding: 6px; text-align: left; vertical-align: top; }
+          .page-break { page-break-before: always; }
+          .sig { display: grid; grid-template-columns: 1fr 260px; gap: 20px; align-items: center; border: 1px solid #d8dee8; border-radius: 6px; padding: 10px; margin-bottom: 10px; min-height: 92px; }
+          .sig img { max-width: 260px; max-height: 70px; object-fit: contain; }
+          .sig p { margin: 4px 0; font-size: 12px; }
+          @media print { button { display: none; } }
+        </style></head><body>
+        <button onclick="window.print()" style="margin-bottom:12px;padding:10px 14px;">Guardar como PDF</button>
+        <header>
+          <img src="${logoPath}" alt="Logo">
+          <div><h1>IGLESIA VISIONARIA HEBREOS 11</h1><h2>PILAR DE ADORACIÓN</h2></div>
+        </header>
+        <div class="meta">
+          <div><strong>Evento</strong><br>${escapeHtml(header.eventName || '-')}</div>
+          <div><strong>Fecha/Código</strong><br>${escapeHtml(code || '-')}</div>
+          <div><strong>Hora inicio</strong><br>${escapeHtml(header.startTime || '-')}</div>
+          <div><strong>Encargado</strong><br>${escapeHtml(header.manager || '-')}</div>
+        </div>
+        <table>
+          <thead><tr><th>#</th><th>Nombre</th><th>A tiempo</th><th>Promedio</th><th>Comentario</th><th>Check</th></tr></thead>
+          <tbody>${rows || '<tr><td colspan="6">Sin colaboradores registrados.</td></tr>'}</tbody>
+        </table>
+        ${signatures ? `<section class="page-break"><h1>Anexo de firmas</h1>${signatures}</section>` : ''}
+        <script>setTimeout(() => window.print(), 500);<\/script>
+      </body></html>`;
+      const win = window.open('', '_blank');
+      if (!win) {
+        const blob = new Blob([report], { type: 'text/html' });
+        const fallback = document.getElementById('pdfFallback');
+        fallback.href = URL.createObjectURL(blob);
+        fallback.download = `reporte-hebreos-11-${code || 'evento'}.html`;
+        fallback.style.display = 'inline-block';
+        fallback.textContent = 'Abrir reporte imprimible';
+        return;
+      }
+      win.document.open();
+      win.document.write(report);
+      win.document.close();
+    }
+    function drawPdfHeader(pdf, header, code) {
+      if (state.logoData) pdf.image(state.logoData, 34, 24, 66, 66);
+      pdf.text(112, 40, 'IGLESIA VISIONARIA HEBREOS 11', { size: 18, bold: true, color: 'navy' });
+      pdf.text(112, 62, 'PILAR DE ADORACIÓN', { size: 14, bold: true, color: 'gold' });
+      pdf.text(112, 84, `Evento: ${header.eventName || '-'}`, { size: 10, bold: true });
+      pdf.text(34, 108, `Fecha/Código: ${code || '-'}`, { size: 9 });
+      pdf.text(176, 108, `Hora inicio: ${header.startTime || '-'}`, { size: 9 });
+      pdf.text(296, 108, `Rango tarde: ${header.lateTolerance || 0} min`, { size: 9 });
+      pdf.text(440, 108, `Encargado: ${header.manager || '-'}`, { size: 9 });
+    }
+    function drawSummaryTable(pdf, startY) {
+      let y = startY;
+      const headers = ['#', 'Nombre', 'Llegada', 'A tiempo', 'Promedio', 'Comentario del colaborador', 'Check'];
+      const widths = [24, 150, 70, 70, 62, 300, 58];
+      drawRow(pdf, 28, y, headers, widths, true);
+      y += 25;
+      state.people.forEach((person, index) => {
+        if (y > 548) { pdf.addPage(); drawPdfHeader(pdf, getHeader(), formatCode()); y = 122; drawRow(pdf, 28, y, headers, widths, true); y += 25; }
+        const status = onTimeStatus(person);
+        const row = [index + 1, person.name, person.arrival || '-', status.label, person.evaluatedAt ? average(person) : '-', person.comment || '-', person.signature ? 'Si' : 'No'];
+        drawRow(pdf, 28, y, row, widths, false);
+        y += 34;
+      });
+    }
+    function drawSignatureAnnex(pdf) {
+      pdf.addPage();
+      drawPdfHeader(pdf, getHeader(), formatCode());
+      pdf.text(34, 122, 'Anexo de firmas', { size: 16, bold: true, color: 'navy' });
+      let y = 150;
+      state.people.forEach((person, index) => {
+        if (y > 512) { pdf.addPage(); drawPdfHeader(pdf, getHeader(), formatCode()); y = 122; }
+        pdf.rect(34, y, 724, 82, '#ffffff');
+        pdf.text(48, y + 18, `${index + 1}. ${person.name}`, { size: 11, bold: true });
+        pdf.text(48, y + 36, `Checking: ${person.signature ? 'Si' : 'No'}`, { size: 10 });
+        pdf.text(48, y + 54, person.checkedAt ? new Date(person.checkedAt).toLocaleString() : 'Pendiente de firma', { size: 9 });
+        if (person.signature) pdf.image(person.signature, 410, y + 12, 260, 58);
+        else pdf.text(475, y + 46, 'Sin firma', { size: 12, color: 'red' });
+        y += 94;
+      });
+    }
+    function drawRow(pdf, x, y, cells, widths, header) {
+      let cx = x;
+      cells.forEach((cell, i) => {
+        pdf.rect(cx, y, widths[i], header ? 25 : 34, header ? '#f5a313' : '#ffffff');
+        wrapText(cell, Math.max(5, Math.floor(widths[i] / 5.1))).slice(0, header ? 2 : 2).forEach((line, row) => {
+          pdf.text(cx + 4, y + 15 + row * 11, line, { size: header ? 8.5 : 8, bold: header });
+        });
+        cx += widths[i];
+      });
+    }
+    function wrapText(value, maxChars) {
+      const words = String(value || '-').replace(/\s+/g, ' ').trim().split(' ');
+      const lines = [];
+      let line = '';
+      words.forEach(word => {
+        const next = line ? `${line} ${word}` : word;
+        if (next.length > maxChars && line) { lines.push(line); line = word; } else { line = next; }
+      });
+      if (line) lines.push(line);
+      return lines.length ? lines : ['-'];
+    }
+
+    class SimplePdf {
+      constructor(options = {}) {
+        this.width = options.landscape ? 792 : 612;
+        this.height = options.landscape ? 612 : 792;
+        this.pages = [];
+        this.addPage();
+      }
+      addPage() { this.pages.push({ commands: [], images: [] }); }
+      get page() { return this.pages[this.pages.length - 1]; }
+      text(x, y, value, options = {}) {
+        const size = options.size || 10;
+        const font = options.bold ? 'F2' : 'F1';
+        const color = options.color === 'red' ? '0.706 0.137 0.094 rg' : options.color === 'gold' ? '0.961 0.639 0.075 rg' : options.color === 'navy' ? '0.043 0.176 0.322 rg' : '0.126 0.129 0.141 rg';
+        this.page.commands.push(`${color} BT /${font} ${size} Tf ${x.toFixed(2)} ${(this.height - y).toFixed(2)} Td (${pdfText(value)}) Tj ET`);
+      }
+      rect(x, y, w, h, fill) {
+        if (fill && fill !== '#ffffff') {
+          const c = hex(fill);
+          this.page.commands.push(`${c} rg ${x.toFixed(2)} ${(this.height - y - h).toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re f`);
+        }
+        this.page.commands.push(`0 0 0 RG ${x.toFixed(2)} ${(this.height - y - h).toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re S`);
+      }
+      image(dataUrl, x, y, w, h) {
+        const binary = atob(dataUrl.split(',')[1]);
+        const name = `Im${this.page.images.length + 1}`;
+        this.page.images.push({ name, binary, width: 900, height: 320 });
+        this.page.commands.push(`q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${(this.height - y - h).toFixed(2)} cm /${name} Do Q`);
+      }
+      save(filename) {
+        const blob = new Blob([this.toBytes()], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        this.lastUrl = url;
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+      toBytes() {
+        const objects = [];
+        const addObject = content => { objects.push(content); return objects.length; };
+        const catalogId = addObject('');
+        const pagesId = addObject('');
+        const fontRegularId = addObject('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+        const fontBoldId = addObject('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+        const pageIds = [];
+        this.pages.forEach(page => {
+          const imageIds = page.images.map(image => addObject(`<< /Type /XObject /Subtype /Image /Width ${image.width} /Height ${image.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${image.binary.length} >>\nstream\n${image.binary}\nendstream`));
+          const xObjects = page.images.map((image, i) => `/${image.name} ${imageIds[i]} 0 R`).join(' ');
+          const resources = `<< /Font << /F1 ${fontRegularId} 0 R /F2 ${fontBoldId} 0 R >> ${xObjects ? `/XObject << ${xObjects} >>` : ''} >>`;
+          const content = page.commands.join('\n');
+          const contentId = addObject(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+          const pageId = addObject(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${this.width} ${this.height}] /Resources ${resources} /Contents ${contentId} 0 R >>`);
+          pageIds.push(pageId);
+        });
+        objects[catalogId - 1] = `<< /Type /Catalog /Pages ${pagesId} 0 R >>`;
+        objects[pagesId - 1] = `<< /Type /Pages /Kids [${pageIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pageIds.length} >>`;
+        let pdf = '%PDF-1.4\n';
+        const offsets = [0];
+        objects.forEach((object, index) => { offsets.push(binaryLength(pdf)); pdf += `${index + 1} 0 obj\n${object}\nendobj\n`; });
+        const xref = binaryLength(pdf);
+        pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+        offsets.slice(1).forEach(offset => { pdf += `${String(offset).padStart(10, '0')} 00000 n \n`; });
+        pdf += `trailer\n<< /Size ${objects.length + 1} /Root ${catalogId} 0 R >>\nstartxref\n${xref}\n%%EOF`;
+        return latin1Bytes(pdf);
+      }
+    }
+    function pdfText(value) { return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7E]/g, '?').replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)'); }
+    function hex(value) {
+      const n = value.replace('#', '');
+      const r = parseInt(n.slice(0, 2), 16) / 255;
+      const g = parseInt(n.slice(2, 4), 16) / 255;
+      const b = parseInt(n.slice(4, 6), 16) / 255;
+      return `${r.toFixed(3)} ${g.toFixed(3)} ${b.toFixed(3)}`;
+    }
+    function binaryLength(value) { return latin1Bytes(value).length; }
+    function latin1Bytes(value) { const bytes = new Uint8Array(value.length); for (let i = 0; i < value.length; i++) bytes[i] = value.charCodeAt(i) & 0xff; return bytes; }
+
+    function newPerson(name, estimated, secret, internalCode = '', eventRole = '') {
+      return { id: uid(), name, estimated, secret: secret || '', internalCode, eventRole, position: eventRole, arrival: '', comment: '', scores: blankScores(), signature: '', checkedAt: '', evaluatedAt: '' };
+    }
+    function collaboratorRoles(collaborator) {
+      return Array.isArray(collaborator.roles) ? collaborator.roles : [];
+    }
+    function renderManagerOptions() {
+      const manager = document.getElementById('manager');
+      if (!manager) return;
+      const current = manager.value;
+      const managers = [...state.collaborators].filter(item => item.canManage).sort(byName);
+      manager.innerHTML = '<option value="">Selecciona encargado</option>' + managers.map(item => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)} (${escapeHtml(item.internalCode || 'sin código')})</option>`).join('');
+      manager.value = current;
+    }
+    function addCollaborator() {
+      const internalCode = document.getElementById('masterCode').value.trim();
+      const name = document.getElementById('masterName').value.trim();
+      const secret = document.getElementById('masterSecret').value.trim();
+      const roles = document.getElementById('masterRoles').value.split(',').map(role => role.trim()).filter(Boolean);
+      const canManage = document.getElementById('masterCanManage').checked;
+      if (!internalCode || !name || !secret) return alert('Escribe código interno, nombre y código secreto.');
+      const existing = state.collaborators.find(item => (item.internalCode || '').toLowerCase() === internalCode.toLowerCase());
+      if (existing) {
+        existing.name = name;
+        existing.secret = secret;
+        existing.roles = roles;
+        existing.canManage = canManage;
+      } else {
+        state.collaborators.push({ id: uid(), internalCode, name, secret, roles, canManage, active: true });
+      }
+      document.getElementById('masterCode').value = '';
+      document.getElementById('masterName').value = '';
+      document.getElementById('masterSecret').value = '';
+      document.getElementById('masterRoles').value = '';
+      document.getElementById('masterCanManage').checked = false;
+      renderAll();
+      saveLocal();
+    }
+    function addMasterToEvent(id, eventRole = '') {
+      const collaborator = state.collaborators.find(item => item.id === id);
+      if (!collaborator) return;
+      if (state.people.some(person => person.internalCode && person.internalCode === collaborator.internalCode)) return alert('Ese colaborador ya está asignado al evento.');
+      state.people.push(newPerson(collaborator.name, true, collaborator.secret, collaborator.internalCode || '', eventRole));
+      renderAll();
+      saveLocal();
+      go('checking');
+    }
+    function renderEventParticipantOptions() {
+      if (!eventParticipantList) return;
+      eventParticipantList.innerHTML = '';
+      const query = document.getElementById('eventParticipantSearch')?.value || '';
+      const inEvent = new Set(state.people.map(person => person.internalCode || person.name.toLowerCase()));
+      const candidates = [...state.collaborators]
+        .sort(byName)
+        .filter(item => !inEvent.has(item.internalCode || item.name.toLowerCase()))
+        .filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query));
+      if (!candidates.length) {
+        eventParticipantList.innerHTML = '<p class="helper">No hay colaboradores para asignar con esa búsqueda.</p>';
+        return;
+      }
+      candidates.forEach(item => {
+        const roles = collaboratorRoles(item);
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div>
+            <strong>${escapeHtml(item.name)}</strong>
+            <small>${escapeHtml(item.internalCode || 'Sin código')} · ${escapeHtml(roles.join(', ') || 'Sin cargos')}</small>
+          </div>
+          <label>Cargo en este evento
+            <select data-role-for="${item.id}">
+              <option value="">Sin cargo</option>
+              ${roles.map(role => `<option value="${escapeHtml(role)}">${escapeHtml(role)}</option>`).join('')}
+            </select>
+          </label>
+          <button class="btn compact green" data-event-add="${item.id}">Agregar</button>
+        `;
+        eventParticipantList.appendChild(row);
+      });
+    }
+    function renderCollaborators() {
+      renderManagerOptions();
+      renderEventParticipantOptions();
+      masterList.innerHTML = '';
+      const query = document.getElementById('masterSearch')?.value || '';
+      const collaborators = [...state.collaborators].sort(byName).filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query));
+      if (!collaborators.length) masterList.innerHTML = '<p class="helper">No hay colaboradores para mostrar.</p>';
+      collaborators.forEach((collaborator, index) => {
+        const inEvent = state.people.some(person => person.internalCode && person.internalCode === collaborator.internalCode);
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div>
+            <strong>${index + 1}. ${escapeHtml(collaborator.name)}</strong>
+            <small>${escapeHtml(collaborator.internalCode || 'Sin código')} · ${escapeHtml(collaboratorRoles(collaborator).join(', ') || 'Sin cargos')} · ${collaborator.canManage ? 'Encargado' : 'Colaborador'}</small>
+          </div>
+          <div class="badges">
+            <span class="badge ${inEvent ? 'done' : 'neutral'}">${inEvent ? 'Asignado' : 'General'}</span>
+          </div>
+          <div class="actions">
+            <button class="btn compact green" data-master-add="${collaborator.id}">Asignar al evento</button>
+            <button class="btn compact danger" data-master-remove="${collaborator.id}">Quitar</button>
+          </div>
+        `;
+        masterList.appendChild(row);
+      });
+    }
+    function addSelectedParticipantsToEvent() {}
+    function addManual() {
+      if (!state.eventLocked) return alert('Primero crea el evento desde la pestaña Evento.');
+      const name = document.getElementById('manualName').value.trim();
+      const roleField = document.getElementById('manualRole') || document.getElementById('manualSecret');
+      const eventRole = roleField ? roleField.value.trim() : '';
+      if (!name) return alert('Escribe el nombre del colaborador.');
+      if (state.people.some(person => person.name.toLowerCase() === name.toLowerCase())) return alert('Ese colaborador ya está asignado al evento.');
+      const existing = state.collaborators.find(item => item.name.toLowerCase() === name.toLowerCase());
+      if (existing) {
+        state.people.push(newPerson(existing.name, true, existing.secret, existing.internalCode || '', eventRole));
+      } else if (confirm(`${name} no existe como colaborador. ¿Quieres crearlo en la lista general?`)) {
+        const internalCode = prompt('Código interno para este colaborador:') || `EXT-${Date.now().toString().slice(-5)}`;
+        const secret = prompt('Código secreto para este colaborador:') || '0000';
+        const collaborator = { id: uid(), internalCode, name, secret, roles: eventRole ? [eventRole] : [], canManage: false, active: true };
+        state.collaborators.push(collaborator);
+        state.people.push(newPerson(name, true, secret, internalCode, eventRole));
+      } else {
+        alert('Se agregará como No listado y usará el código genérico 0000 para checking.');
+        state.people.push(newPerson(name, false, '0000', '', eventRole));
+      }
+      document.getElementById('manualName').value = '';
+      if (roleField) roleField.value = '';
+      renderAll();
+      saveLocal();
+    }
+    function finalRenderManagerOptions() {
+      const manager = document.getElementById('manager');
+      if (!manager) return;
+      const current = manager.value;
+      const managers = [...state.collaborators].filter(item => item.active !== false && collaboratorRoles(item).includes('Encargado')).sort(byName);
+      manager.innerHTML = '<option value="">Selecciona encargado</option>' + managers.map(item => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)} (${escapeHtml(item.internalCode || 'sin código')})</option>`).join('');
+      manager.value = current;
+    }
+    renderManagerOptions = finalRenderManagerOptions;
+    function finalAddCollaborator() {
+      const internalCode = document.getElementById('masterCode').value.trim() || nextInternalCode();
+      const name = document.getElementById('masterName').value.trim();
+      const secret = document.getElementById('masterSecret').value.trim();
+      syncRoleOptions();
+      const roles = document.getElementById('masterRoles').value.split(',').map(role => role.trim()).filter(Boolean);
+      if (!name || !secret) return alert('Escribe nombre y código secreto.');
+      const existing = state.collaborators.find(item => (item.internalCode || '').toLowerCase() === internalCode.toLowerCase());
+      if (existing) {
+        existing.name = name;
+        existing.secret = secret;
+        existing.roles = roles;
+        existing.canManage = roles.includes('Encargado');
+        existing.active = existing.active !== false;
+      } else {
+        state.collaborators.push({ id: uid(), internalCode, name, secret, roles, canManage: roles.includes('Encargado'), active: true });
+      }
+      document.getElementById('masterCode').value = nextInternalCode();
+      document.getElementById('masterName').value = '';
+      document.getElementById('masterSecret').value = '';
+      renderRoleOptions([]);
+      renderAll();
+      saveLocal();
+    }
+    addCollaborator = finalAddCollaborator;
+    function finalRenderEventParticipantOptions() {
+      if (!eventParticipantList) return;
+      eventParticipantList.innerHTML = '';
+      const query = document.getElementById('eventParticipantSearch')?.value || '';
+      const inEvent = new Set(state.people.map(person => person.internalCode || person.name.toLowerCase()));
+      const candidates = [...state.collaborators].filter(item => item.active !== false).sort(byName).filter(item => !inEvent.has(item.internalCode || item.name.toLowerCase())).filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query));
+      if (!candidates.length) {
+        eventParticipantList.innerHTML = '<p class="helper">No hay colaboradores para asignar con esa búsqueda.</p>';
+        return;
+      }
+      candidates.forEach(item => {
+        const roles = collaboratorRoles(item);
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `<div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.internalCode || 'Sin código')} · ${escapeHtml(roles.join(', ') || 'Sin cargos')}</small></div><label>Cargo en este evento<select data-role-for="${item.id}"><option value="">Sin cargo</option>${roles.map(role => `<option value="${escapeHtml(role)}">${escapeHtml(role)}</option>`).join('')}</select></label><button class="btn compact green" data-event-add="${item.id}">Agregar</button>`;
+        eventParticipantList.appendChild(row);
+      });
+    }
+    renderEventParticipantOptions = finalRenderEventParticipantOptions;
+    function finalRenderAssignedParticipants() {
+      if (!eventAssignedList) return;
+      eventAssignedList.innerHTML = '';
+      const assigned = [...state.people].sort(byName);
+      if (!assigned.length) {
+        eventAssignedList.innerHTML = '<p class="helper">Todavía no hay participantes asignados.</p>';
+        return;
+      }
+      assigned.forEach(person => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `<div><strong>${escapeHtml(person.name)}</strong><small>${escapeHtml(person.internalCode || 'No listado')} · ${escapeHtml(person.eventRole || 'Sin cargo')}</small></div><span class="badge ${person.estimated ? 'done' : 'neutral'}">${person.estimated ? 'Listado' : 'No listado'}</span>`;
+        eventAssignedList.appendChild(row);
+      });
+    }
+    renderAssignedParticipants = finalRenderAssignedParticipants;
+    function finalRenderCollaborators() {
+      renderManagerOptions();
+      renderEventParticipantOptions();
+      renderAssignedParticipants();
+      masterList.innerHTML = '';
+      const query = document.getElementById('masterSearch')?.value || '';
+      const collaborators = [...state.collaborators].sort(byName).filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query));
+      if (!collaborators.length) masterList.innerHTML = '<p class="helper">No hay colaboradores para mostrar.</p>';
+      collaborators.forEach((collaborator, index) => {
+        const inEvent = state.people.some(person => person.internalCode && person.internalCode === collaborator.internalCode);
+        const inactive = collaborator.active === false;
+        const row = document.createElement('div');
+        row.className = `row ${inactive ? 'inactive' : ''}`;
+        row.innerHTML = `<div><strong>${index + 1}. ${escapeHtml(collaborator.name)}</strong><small>${escapeHtml(collaborator.internalCode || 'Sin código')} · ${escapeHtml(collaboratorRoles(collaborator).join(', ') || 'Sin cargos')} · ${inactive ? 'Inactivo' : 'Activo'}</small></div><div class="badges"><span class="badge ${inEvent ? 'done' : 'neutral'}">${inEvent ? 'Asignado' : 'General'}</span></div><div class="actions"><button class="btn compact" data-master-edit="${collaborator.id}">Editar</button><button class="btn compact green" data-master-add="${collaborator.id}">Asignar</button><button class="btn compact danger" data-master-toggle="${collaborator.id}">${inactive ? 'Activar' : 'Inactivar'}</button></div>`;
+        masterList.appendChild(row);
+      });
+    }
+    renderCollaborators = finalRenderCollaborators;
+    function renderCheckingCandidates() {
+      const list = document.getElementById('checkingCandidateList');
+      if (!list) return;
+      const query = document.getElementById('manualName')?.value.trim() || '';
+      list.innerHTML = '';
+      if (!query) return;
+      const inEvent = new Set(state.people.map(person => person.internalCode || normalizedName(person.name)));
+      const candidates = [...state.collaborators]
+        .filter(item => item.active !== false)
+        .filter(item => !inEvent.has(item.internalCode || normalizedName(item.name)))
+        .filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query))
+        .sort(byName);
+      if (!candidates.length) {
+        list.innerHTML = '<p class="helper">Ese colaborador no existe en la lista general. Debes crearlo primero en Colaboradores.</p>';
+        return;
+      }
+      candidates.forEach(item => {
+        const roles = collaboratorRoles(item);
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div>
+            <strong>${escapeHtml(item.name)}</strong>
+            <small>${escapeHtml(item.internalCode || 'Sin código')} · ${escapeHtml(roles.join(', ') || 'Sin cargos')}</small>
+          </div>
+          <label>Cargo en este evento
+            <select data-check-role-for="${item.id}">
+              <option value="">Sin cargo</option>
+              ${roles.map(role => `<option value="${escapeHtml(role)}">${escapeHtml(role)}</option>`).join('')}
+            </select>
+          </label>
+          <button class="btn compact green" data-check-add="${item.id}">Agregar y firmar</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+    function finalAddManual() {
+      if (!state.eventLocked) return alert('Primero crea el evento desde la pestaña Evento.');
+      const query = document.getElementById('manualName').value.trim();
+      if (!query) return alert('Busca el colaborador por nombre o código interno.');
+      const matches = [...state.collaborators]
+        .filter(item => item.active !== false)
+        .filter(item => searchIncludes(item.name, query) || searchIncludes(item.internalCode, query))
+        .sort(byName);
+      if (!matches.length) return alert('Ese colaborador no existe en la lista general. Debes crearlo primero en Colaboradores.');
+      if (matches.length > 1) return alert('Hay más de un resultado. Elige uno desde la lista de resultados.');
+      addCollaboratorFromChecking(matches[0].id);
+    }
+    addManual = finalAddManual;
+    function addCollaboratorFromChecking(id) {
+      const collaborator = state.collaborators.find(item => item.id === id);
+      if (!collaborator) return;
+      if (state.people.some(person => (person.internalCode && person.internalCode === collaborator.internalCode) || normalizedName(person.name) === normalizedName(collaborator.name))) {
+        return alert('Ese colaborador ya está asignado al evento.');
+      }
+      const role = document.querySelector(`[data-check-role-for="${id}"]`)?.value || '';
+      const person = newPerson(collaborator.name, true, collaborator.secret, collaborator.internalCode || '', role);
+      state.people.push(person);
+      document.getElementById('manualName').value = '';
+      document.getElementById('checkingCandidateList').innerHTML = '';
+      renderAll();
+      saveLocal();
+      openCheck(person.id);
+    }
+    document.querySelectorAll('.step').forEach(button => button.addEventListener('click', () => go(button.dataset.section)));
+    headerFields.forEach(id => document.getElementById(id).addEventListener('input', () => { if (!state.eventLocked) { renderAll(); saveLocal(); } }));
+    document.getElementById('masterSearch').addEventListener('input', renderCollaborators);
+    document.getElementById('eventParticipantSearch').addEventListener('input', renderEventParticipantOptions);
+    document.getElementById('prepareRoster').addEventListener('click', prepareRoster);
+    document.getElementById('unlockEvent').addEventListener('click', () => {
+      if (requestPassword('Escribe el código para editar el evento:')) {
+        lockEvent(false);
+        saveLocal();
+      } else {
+        alert('Código incorrecto.');
+      }
+    });
+    document.getElementById('newMaster').addEventListener('click', resetCollaboratorForm);
+    document.getElementById('addMaster').addEventListener('click', addCollaborator);
+    eventParticipantList.addEventListener('click', event => {
+      if (!event.target.dataset.eventAdd) return;
+      const id = event.target.dataset.eventAdd;
+      const role = document.querySelector(`[data-role-for="${id}"]`)?.value || '';
+      addMasterToEvent(id, role);
+    });
+    masterList.addEventListener('click', event => {
+      if (event.target.dataset.masterAdd) addMasterToEvent(event.target.dataset.masterAdd);
+      if (event.target.dataset.masterEdit) {
+        const collaborator = state.collaborators.find(item => item.id === event.target.dataset.masterEdit);
+        if (collaborator) {
+          document.getElementById('masterCode').value = collaborator.internalCode || nextInternalCode();
+          document.getElementById('masterName').value = collaborator.name || '';
+          document.getElementById('masterSecret').value = collaborator.secret || '';
+          renderRoleOptions(collaboratorRoles(collaborator));
+          go('lista');
+        }
+      }
+      if (event.target.dataset.masterToggle) {
+        const collaborator = state.collaborators.find(item => item.id === event.target.dataset.masterToggle);
+        if (collaborator) {
+          collaborator.active = collaborator.active === false;
+          renderAll();
+          saveLocal();
+        }
+      }
+      if (event.target.dataset.masterRemove && confirm('¿Quitar este colaborador de la lista maestra?')) {
+        state.collaborators = state.collaborators.filter(item => item.id !== event.target.dataset.masterRemove);
+        renderAll();
+        saveLocal();
+      }
+    });
+    document.getElementById('addManual').addEventListener('click', addManual);
+    document.getElementById('manualName').addEventListener('input', renderCheckingCandidates);
+    document.getElementById('checkingCandidateList').addEventListener('click', event => {
+      if (event.target.dataset.checkAdd) addCollaboratorFromChecking(event.target.dataset.checkAdd);
+    });
+    checkingList.addEventListener('click', event => {
+      if (event.target.dataset.check) openCheck(event.target.dataset.check);
+      if (event.target.dataset.remove && confirm('¿Quitar este colaborador?')) {
+        state.people = state.people.filter(person => person.id !== event.target.dataset.remove);
+        renderAll();
+        saveLocal();
+      }
+    });
+    evaluationList.addEventListener('click', event => {
+      if (event.target.dataset.eval) openEval(event.target.dataset.eval);
+    });
+    document.getElementById('scoreGrid').addEventListener('input', event => {
+      if (!event.target.dataset.score) return;
+      event.target.previousElementSibling.textContent = event.target.value;
+    });
+    document.getElementById('closeCheck').addEventListener('click', () => checkDialog.close());
+    document.getElementById('saveCheck').addEventListener('click', saveCheck);
+    document.getElementById('unlockArrival').addEventListener('click', () => {
+      if (requestPassword('Escribe el código para corregir la hora:')) {
+        const input = document.getElementById('checkArrival');
+        input.disabled = false;
+        input.dataset.unlocked = 'true';
+        input.focus();
+      } else {
+        alert('Código incorrecto.');
+      }
+    });
+    document.getElementById('clearPad').addEventListener('click', () => { ctx.clearRect(0, 0, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height); state.hasStroke = false; });
+    document.getElementById('closeEval').addEventListener('click', () => evalDialog.close());
+    document.getElementById('saveEval').addEventListener('click', saveEval);
+    document.getElementById('saveDraft').addEventListener('click', () => { saveLocal(); alert('Avance guardado en este dispositivo.'); });
+    document.getElementById('downloadPdf').addEventListener('click', generatePdf);
+    document.getElementById('syncSheet').addEventListener('click', syncToGoogleSheets);
+    document.getElementById('loadHistory').addEventListener('click', loadHistoryFromGoogleSheets);
+    document.getElementById('historyEventSearch').addEventListener('input', renderHistoryEvents);
+    document.getElementById('historyEventList').addEventListener('click', event => {
+      if (event.target.dataset.restoreEvent) restoreHistoryEvent(event.target.dataset.restoreEvent);
+    });
+    document.getElementById('refreshKpis').addEventListener('click', loadHistoryFromGoogleSheets);
+    document.getElementById('kpiDateFrom').addEventListener('input', renderKpisDashboard);
+    document.getElementById('kpiDateTo').addEventListener('input', renderKpisDashboard);
+    document.getElementById('kpiCollaborator').addEventListener('change', renderKpisDashboard);
+    document.getElementById('clearKpiFilters').addEventListener('click', () => {
+      document.getElementById('kpiDateFrom').value = '';
+      document.getElementById('kpiDateTo').value = '';
+      document.getElementById('kpiCollaborator').value = '';
+      renderKpisDashboard();
+    });
+    function resetCurrentEvent() {
+      if (!confirm('¿Crear un documento nuevo y borrar el avance de este dispositivo?')) return;
+      localStorage.removeItem(storageKey);
+      state.people = [];
+      state.eventLocked = false;
+      headerFields.forEach(id => document.getElementById(id).value = '');
+      document.getElementById('eventDate').value = today;
+      document.getElementById('eventInternalId').value = '';
+      document.getElementById('lateTolerance').value = 5;
+      renderAll();
+      go('evento');
+    }
+    document.getElementById('resetAll').addEventListener('click', resetCurrentEvent);
+    document.getElementById('resetAllTop').addEventListener('click', resetCurrentEvent);
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseleave', stopDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDraw);
+    window.addEventListener('resize', () => checkDialog.open && resizeCanvas());
+
+    loadLocal();
+    const manualSecretInput = document.getElementById('manualSecret');
+    if (manualSecretInput) manualSecretInput.closest('label').style.display = 'none';
+    const manualNameInput = document.getElementById('manualName');
+    if (manualNameInput) {
+      manualNameInput.placeholder = 'Buscar por nombre o código interno';
+      const label = manualNameInput.closest('label');
+      if (label?.firstChild) label.firstChild.textContent = 'Buscar colaborador para agregar al evento ';
+    }
+    document.getElementById('addManual').textContent = 'Agregar al evento';
+    setSheetStatus(getSheetEndpoint() ? 'Google Sheets conectado. Puedes sincronizar y actualizar KPIs.' : 'Pendiente de configurar Google Sheets dentro de la app.');
+    try { state.history = JSON.parse(localStorage.getItem(historyCacheKey) || '[]'); } catch { state.history = []; }
+    const cleanedTests = cleanupTestCollaborators();
+    if (seedCollaborators()) saveLocal();
+    if (cleanedTests) saveLocal();
+    resetCollaboratorForm();
+    if (!document.getElementById('lateTolerance').value) document.getElementById('lateTolerance').value = 5;
+    if (document.getElementById('lateTolerance').value === '0') document.getElementById('lateTolerance').value = 5;
+    applyEventLock();
+    renderAll();
+    renderHistoryDashboard();
+    renderKpisDashboard();
+    loadImageData(logoPath).then(data => { state.logoData = data; });
+  </script>
+</body>
+</html>
+
