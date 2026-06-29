@@ -105,11 +105,30 @@
     .mini-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .mini-table th, .mini-table td { border-bottom: 1px solid var(--line); padding: 9px; text-align: left; vertical-align: top; }
     .mini-table th { color: var(--navy); background: #f8fafc; }
+    .performance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; align-items: start; }
+    .performance-card { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 14px; display: grid; gap: 12px; }
+    .performance-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+    .performance-head strong { display: block; color: var(--navy); font-size: 17px; }
+    .performance-head small { color: var(--muted); }
+    .performance-score { min-width: 72px; border-radius: 8px; background: var(--navy); color: #fff; text-align: center; padding: 8px; }
+    .performance-score b { display: block; font-size: 22px; line-height: 1; }
+    .performance-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .performance-stat { border: 1px solid var(--line); border-radius: 8px; background: var(--soft); padding: 8px; min-height: 58px; }
+    .performance-stat b { display: block; color: var(--ink); font-size: 17px; }
+    .performance-stat span { color: var(--muted); font-size: 11px; }
+    .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; }
+    .concept-chip { border-radius: 8px; padding: 9px; border: 1px solid var(--line); background: #f8fafc; }
+    .concept-chip b { display: block; font-size: 18px; color: var(--ink); }
+    .concept-chip span { display: block; color: var(--muted); font-size: 11px; }
+    .concept-chip.good { background: #ecfdf3; border-color: #abefc6; }
+    .concept-chip.mid { background: #fffaeb; border-color: #fedf89; }
+    .concept-chip.low { background: #fef3f2; border-color: #fecdca; }
 
     @media (max-width: 980px) {
       .app { grid-template-columns: 1fr; }
       .topline { align-items: flex-start; flex-direction: column; }
       .grid, .summary-grid, .toolbar, .score-grid { grid-template-columns: 1fr; }
+      .performance-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .row { grid-template-columns: 1fr; }
       .badges { justify-content: flex-start; }
       main { padding: 16px; }
@@ -145,9 +164,9 @@
         <button class="step" data-section="lista">Colaboradores</button>
         <button class="step" data-section="checking">Checking</button>
         <button class="step" data-section="evaluacion">Evaluación</button>
-        <button class="step" data-section="resumen">Resumen y PDF</button>
         <button class="step" data-section="historico">Hist&oacute;rico</button>
         <button class="step" data-section="kpis">KPIs</button>
+        <button class="step" data-section="configuracion">Configuraci&oacute;n</button>
       </nav>
     </aside>
 
@@ -286,6 +305,14 @@
           <button class="btn" id="loadHistory">Actualizar KPIs</button>
         </div>
         <div id="sheetStatus" class="notice">Pendiente de conectar Google Sheets.</div>
+        <div class="grid" style="margin-top: 18px;">
+          <label>Desde
+            <input id="historyDateFrom" type="date" />
+          </label>
+          <label>Hasta
+            <input id="historyDateTo" type="date" />
+          </label>
+        </div>
         <h3 style="margin:22px 0 12px;">Eventos anteriores</h3>
         <label style="margin-bottom: 14px;">Buscar evento
           <input id="historyEventSearch" placeholder="Buscar por ID, fecha, tipo o nombre" />
@@ -305,9 +332,14 @@
           <label class="wide">Colaborador
             <select id="kpiCollaborator"></select>
           </label>
+          <label class="wide">Evento
+            <select id="kpiEvent"></select>
+          </label>
           <div class="actions wide">
             <button class="btn" id="refreshKpis">Actualizar KPIs</button>
             <button class="btn" id="clearKpiFilters">Ver todos</button>
+            <button class="btn primary" id="kpiCardView" type="button">Vista tarjetas</button>
+            <button class="btn" id="kpiTableView" type="button">Vista tabla</button>
           </div>
         </div>
         <div class="summary-grid" style="margin-top: 18px;">
@@ -321,6 +353,20 @@
           <div class="metric"><strong id="kpiEvalRate">0%</strong><span>% evaluado</span></div>
         </div>
         <div id="kpiDetail"></div>
+      </section>
+
+      <section id="configuracion">
+        <p class="helper">Ajustes generales de listas usadas por la app. Estos cambios quedan guardados en este navegador.</p>
+        <div class="grid">
+          <label class="wide">Cargos disponibles
+            <textarea id="configRoles" placeholder="Un cargo por l&iacute;nea"></textarea>
+          </label>
+          <div class="actions wide">
+            <button class="btn primary" id="saveConfig" type="button">Guardar configuraci&oacute;n</button>
+            <button class="btn" id="resetConfig" type="button">Restaurar valores base</button>
+          </div>
+        </div>
+        <div class="notice">Los cargos afectan colaboradores nuevos/ediciones y selecci&oacute;n de cargo por evento. No cambian registros hist&oacute;ricos ya enviados.</div>
       </section>
     </main>
   </div>
@@ -362,6 +408,9 @@
       </div>
       <div class="grid">
         <label>Nombre del colaborador<input id="editName" /></label>
+        <label class="wide">Observaciones / Comentarios
+          <textarea id="evalComment" placeholder="Observaciones de la evaluación"></textarea>
+        </label>
         <label>Posición en el evento<input id="editPosition" /></label>
       </div>
       <div class="score-grid" id="scoreGrid"></div>
@@ -376,10 +425,14 @@
     const sheetConfigKey = 'hebreos11GoogleSheetEndpointV1';
     const historyCacheKey = 'hebreos11HistoryCacheV1';
     const eventSequenceKey = 'hebreos11EventSequenceByDateV1';
+    const appConfigKey = 'hebreos11AppConfigV1';
     const googleScriptEndpoint = 'https://script.google.com/macros/s/AKfycbzOuKs5J4A9mt8BZl3cBtzV-YMk6Ymwx8w0KT6gU5VdrV4Nz4wtMsGGz3WHDbusdHLO/exec';
+    const authCode = 'H11@1234';
     const logoPath = 'logo-hebreos-11.png';
     const metrics = ['Puntualidad', 'Responsabilidad', 'Trabajo en equipo', 'Excelencia', 'Vestimenta', 'Creatividad', 'Respeto', 'Entrega', 'Preparación Previa', 'Conexión espiritual'];
-    const state = { people: [], collaborators: [], history: [], activeId: null, drawing: false, hasStroke: false, logoData: '', eventLocked: false, historyUnlocked: false, currentSection: 'evento' };
+    const defaultRoles = ['Encargado', 'Cantante', 'Músico', 'Guitarrista', 'Bajista', 'Baterista', 'Pianista', 'Coro', 'Sonido', 'Multimedia', 'Danza', 'Director'];
+    const standardRoles = defaultRoles;
+    const state = { people: [], collaborators: [], history: [], config: { roles: [...defaultRoles] }, kpiView: 'cards', activeId: null, drawing: false, hasStroke: false, logoData: '', eventLocked: false, historyUnlocked: false, eventAccessUnlocked: false, collaboratorAccessUnlocked: false, configUnlocked: false, currentSection: 'evento' };
     const headerFields = ['eventName', 'eventType', 'eventDate', 'startTime', 'lateTolerance', 'manager', 'eventInternalId', 'standardPeople'];
     const today = new Date().toISOString().slice(0, 10);
     document.getElementById('eventDate').value = today;
@@ -393,7 +446,6 @@
     const evalDialog = document.getElementById('evalDialog');
     const canvas = document.getElementById('signaturePad');
     const ctx = canvas.getContext('2d');
-    const standardRoles = ['Encargado', 'Cantante', 'Músico', 'Guitarrista', 'Bajista', 'Baterista', 'Pianista', 'Coro', 'Sonido', 'Multimedia', 'Danza', 'Director'];
     const seededCollaboratorGroups = [
       {
         roles: ['Encargado'],
@@ -504,6 +556,40 @@
       localStorage.setItem(storageKey, JSON.stringify({ header: getHeader(), people: state.people, collaborators: state.collaborators, eventLocked: state.eventLocked }));
       updateSummary();
     }
+    function configuredRoles() {
+      return Array.isArray(state.config.roles) && state.config.roles.length ? state.config.roles : defaultRoles;
+    }
+    function loadAppConfig() {
+      try {
+        const data = JSON.parse(localStorage.getItem(appConfigKey) || '{}');
+        state.config.roles = Array.isArray(data.roles) && data.roles.length ? data.roles : [...defaultRoles];
+      } catch {
+        state.config.roles = [...defaultRoles];
+      }
+    }
+    function saveAppConfig() {
+      localStorage.setItem(appConfigKey, JSON.stringify(state.config));
+    }
+    function renderConfig() {
+      const rolesBox = document.getElementById('configRoles');
+      if (rolesBox) rolesBox.value = configuredRoles().join('\n');
+    }
+    function saveConfigFromUi() {
+      const roles = document.getElementById('configRoles').value.split(/\r?\n/).map(role => role.trim()).filter(Boolean);
+      state.config.roles = [...new Set(roles.length ? roles : defaultRoles)];
+      saveAppConfig();
+      renderRoleOptions(document.getElementById('masterRoles').value.split(',').filter(Boolean));
+      renderAll();
+      alert('Configuración guardada.');
+    }
+    function resetConfigToDefaults() {
+      if (!confirm('¿Restaurar los cargos base?')) return;
+      state.config.roles = [...defaultRoles];
+      saveAppConfig();
+      renderConfig();
+      renderRoleOptions([]);
+      renderAll();
+    }
     function saveSheetEndpoint() {
       const endpoint = document.getElementById('sheetEndpoint').value.trim();
       localStorage.setItem(sheetConfigKey, endpoint);
@@ -523,6 +609,27 @@
     function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char])); }
 
     function go(sectionId) {
+      if (sectionId === 'evento' && !state.eventAccessUnlocked) {
+        if (!requestPassword('Escribe el código para abrir Evento:')) {
+          alert('Código incorrecto.');
+          return;
+        }
+        state.eventAccessUnlocked = true;
+      }
+      if (sectionId === 'lista' && !state.collaboratorAccessUnlocked) {
+        if (!requestPassword('Escribe el código para abrir Colaboradores:')) {
+          alert('Código incorrecto.');
+          return;
+        }
+        state.collaboratorAccessUnlocked = true;
+      }
+      if (sectionId === 'configuracion' && !state.configUnlocked) {
+        if (!requestPassword('Escribe el código para abrir Configuración:')) {
+          alert('Código incorrecto.');
+          return;
+        }
+        state.configUnlocked = true;
+      }
       if ((sectionId === 'historico' || sectionId === 'kpis') && !state.historyUnlocked) {
         if (!requestPassword('Escribe el codigo para abrir Historico/KPIs:')) {
           alert('Codigo incorrecto.');
@@ -532,14 +639,25 @@
       }
       document.querySelectorAll('section').forEach(section => section.classList.toggle('active', section.id === sectionId));
       document.querySelectorAll('.step').forEach(step => step.classList.toggle('active', step.dataset.section === sectionId));
-      document.getElementById('sectionTitle').textContent = { evento: 'Evento', lista: 'Colaboradores', checking: 'Checking', evaluacion: 'Evaluación', resumen: 'Resumen y PDF', historico: 'Histórico', kpis: 'KPIs' }[sectionId];
+      document.getElementById('sectionTitle').textContent = { evento: 'Evento', lista: 'Colaboradores', checking: 'Checking', evaluacion: 'Evaluación', resumen: 'Resumen y PDF', historico: 'Histórico', kpis: 'KPIs', configuracion: 'Configuración' }[sectionId];
       document.getElementById('resetAllTop').style.display = ['evento', 'evaluacion'].includes(sectionId) ? 'inline-flex' : 'none';
       state.currentSection = sectionId;
       if (sectionId === 'historico') renderHistoryDashboard();
       if (sectionId === 'kpis') renderKpisDashboard();
+      if (sectionId === 'configuracion') renderConfig();
+    }
+    function ensureEventAccess() {
+      if (state.eventAccessUnlocked) return true;
+      if (!requestPassword('Escribe el código para administrar Eventos:')) {
+        alert('Código incorrecto.');
+        return false;
+      }
+      state.eventAccessUnlocked = true;
+      return true;
     }
 
     function prepareRoster() {
+      if (!ensureEventAccess()) return;
       if (!ensureEventEditable()) return;
       ensureEventId();
       addSelectedParticipantsToEvent();
@@ -549,7 +667,7 @@
       go('checking');
     }
     function newPerson(name, estimated, secret) {
-      return { id: uid(), name, estimated, secret: secret || '', position: '', arrival: '', comment: '', scores: blankScores(), signature: '', checkedAt: '', evaluatedAt: '' };
+      return { id: uid(), name, estimated, secret: secret || '', position: '', arrival: '', comment: '', evaluationComment: '', scores: blankScores(), signature: '', checkedAt: '', evaluatedAt: '', manualArrival: false, arrivalChangeLog: [] };
     }
     function addCollaborator() {
       const name = document.getElementById('masterName').value.trim();
@@ -663,7 +781,7 @@
     function renderRoleOptions(selected = []) {
       const box = document.getElementById('masterRoleOptions');
       if (!box) return;
-      box.innerHTML = standardRoles.map(role => `
+      box.innerHTML = configuredRoles().map(role => `
         <label class="badge neutral" style="cursor:pointer;">
           <input type="checkbox" value="${escapeHtml(role)}" ${selected.includes(role) ? 'checked' : ''} />
           ${escapeHtml(role)}
@@ -767,7 +885,7 @@
     }
 
     function requestPassword(message) {
-      return prompt(message || 'Código de autorización') === '1234';
+      return prompt(message || 'Código de autorización') === authCode;
     }
     function ensureEventEditable() {
       if (!state.eventLocked) return true;
@@ -806,6 +924,9 @@
     function personHasCheck(person) {
       return !!(person.signature || person.checkedAt || person.checked === 'Si');
     }
+    requestPassword = function(message) {
+      return prompt(message || 'Código de autorización') === authCode;
+    };
 
     function renderAll() {
       applyEventLock();
@@ -955,6 +1076,9 @@
             punctualityStatus: status.label,
             averageScore: person.evaluatedAt ? average(person) : '',
             comment: person.comment || '',
+            evaluationComment: person.evaluationComment || '',
+            manualArrival: person.manualArrival ? 'Si' : 'No',
+            arrivalChangeLog: JSON.stringify(person.arrivalChangeLog || []),
             checkedAt: person.checkedAt || '',
             evaluatedAt: person.evaluatedAt || '',
             scores: JSON.stringify(person.scores || {})
@@ -1025,7 +1149,7 @@
         delete window[callback];
         state.history = Array.isArray(data.rows) ? data.rows : [];
         localStorage.setItem(historyCacheKey, JSON.stringify(state.history));
-        setSheetStatus(`Historico cargado: ${state.history.length} registro(s).`);
+        setSheetStatus(`Histórico cargado: ${groupedHistoryEvents().length} evento(s), ${state.history.length} registro(s).`);
         renderHistoryDashboard();
         renderKpisDashboard();
       };
@@ -1055,7 +1179,12 @@
       const list = document.getElementById('historyEventList');
       if (!list) return;
       const query = document.getElementById('historyEventSearch')?.value || '';
-      const events = groupedHistoryEvents().filter(event => [event.eventId, event.eventName, event.eventType, event.eventDate, event.manager].some(value => searchIncludes(value, query)));
+      const from = document.getElementById('historyDateFrom')?.value || '';
+      const to = document.getElementById('historyDateTo')?.value || '';
+      const events = groupedHistoryEvents()
+        .filter(event => !from || String(event.eventDate || '') >= from)
+        .filter(event => !to || String(event.eventDate || '') <= to)
+        .filter(event => [event.eventId, event.eventName, event.eventType, event.eventDate, event.manager].some(value => searchIncludes(value, query)));
       if (!events.length) {
         list.innerHTML = '<p class="helper">No hay eventos anteriores para mostrar.</p>';
         return;
@@ -1096,6 +1225,8 @@
       state.people = rows.map(row => {
         let scores = blankScores();
         try { scores = row.scores ? { ...scores, ...JSON.parse(row.scores) } : scores; } catch {}
+        let arrivalChangeLog = [];
+        try { arrivalChangeLog = row.arrivalChangeLog ? JSON.parse(row.arrivalChangeLog) : []; } catch {}
         const collaborator = state.collaborators.find(item => item.internalCode && item.internalCode === row.collaboratorCode)
           || state.collaborators.find(item => normalizedName(item.name) === normalizedName(row.collaboratorName));
         return {
@@ -1108,11 +1239,14 @@
           position: row.eventRole || '',
           arrival: row.arrival || '',
           comment: row.comment || '',
+          evaluationComment: row.evaluationComment || '',
           scores,
           signature: '',
           checkedAt: row.checkedAt || '',
           evaluatedAt: row.evaluatedAt || '',
-          checked: row.checked || ''
+          checked: row.checked || '',
+          manualArrival: row.manualArrival === 'Si',
+          arrivalChangeLog
         };
       }).sort(byName);
       state.eventLocked = true;
@@ -1183,13 +1317,18 @@
       const from = document.getElementById('kpiDateFrom')?.value || '';
       const to = document.getElementById('kpiDateTo')?.value || '';
       const collaborator = document.getElementById('kpiCollaborator')?.value || '';
+      const eventId = document.getElementById('kpiEvent')?.value || '';
       return [...state.history].filter(row => {
         const date = row.eventDate || '';
         if (from && date < from) return false;
         if (to && date > to) return false;
         if (collaborator && row.collaboratorName !== collaborator) return false;
+        if (eventId && row.eventId !== eventId) return false;
         return true;
       });
+    }
+    function eventLabel(row) {
+      return `${row.eventId || 'Sin ID'} · ${row.eventDate || '-'} · ${row.eventName || row.eventType || 'Evento'}`;
     }
     function lateMinutes(row) {
       if (!row.startTime || !row.arrival) return 0;
@@ -1211,6 +1350,13 @@
       const previous = select.value;
       select.innerHTML = '<option value="">Todos los colaboradores</option>' + names.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
       if ([...select.options].some(option => option.value === previous)) select.value = previous;
+      const eventSelect = document.getElementById('kpiEvent');
+      const previousEvent = eventSelect.value;
+      const eventRows = groupedHistoryEvents();
+      eventSelect.innerHTML = '<option value="">Todos los eventos</option>' + eventRows.map(event => `<option value="${escapeHtml(event.eventId)}">${escapeHtml(event.eventId)} · ${escapeHtml(event.eventDate || '-')} · ${escapeHtml(event.eventName || event.eventType || 'Evento')}</option>`).join('');
+      if ([...eventSelect.options].some(option => option.value === previousEvent)) eventSelect.value = previousEvent;
+      document.getElementById('kpiCardView').classList.toggle('primary', state.kpiView !== 'table');
+      document.getElementById('kpiTableView').classList.toggle('primary', state.kpiView === 'table');
       const kpiRows = filteredKpiRows();
       const lateRows = kpiRows.filter(row => row.onTime === 'No' || row.punctualityStatus === 'Tarde');
       const onTimeCount = kpiRows.filter(row => row.onTime === 'Si' || row.punctualityStatus === 'A tiempo').length;
@@ -1244,10 +1390,54 @@
           const personAvgScores = personRows.map(row => Number(row.averageScore)).filter(value => !Number.isNaN(value) && value > 0);
           const personAvg = personAvgScores.length ? Math.round(personAvgScores.reduce((sum, value) => sum + value, 0) / personAvgScores.length * 10) / 10 : '-';
           const personAvgLate = personLate.length ? Math.round(personLate.reduce((sum, row) => sum + lateMinutes(row), 0) / personLate.length) : 0;
-          return { name, count: personRows.length, events: new Set(personRows.map(row => row.eventId).filter(Boolean)).size, late: personLate.length, lateRate: personRows.length ? Math.round(personLate.length / personRows.length * 100) : 0, avgLate: personAvgLate, avg: personAvg };
+          const metricAverages = {};
+          metrics.forEach(metric => {
+            const values = personRows.map(row => {
+              try { return Number(JSON.parse(row.scores || '{}')[metric]); } catch { return 0; }
+            }).filter(value => value > 0);
+            metricAverages[metric] = values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length * 10) / 10 : '-';
+          });
+          return { name, count: personRows.length, events: new Set(personRows.map(row => row.eventId).filter(Boolean)).size, late: personLate.length, lateRate: personRows.length ? Math.round(personLate.length / personRows.length * 100) : 0, avgLate: personAvgLate, avg: personAvg, metricAverages };
         });
-      detail.innerHTML = `<table class="mini-table">
-        <thead><tr><th>Colaborador</th><th>Eventos</th><th>Participaciones</th><th>Tardanzas</th><th>% tardanza</th><th>Promedio tarde</th><th>Desempeño</th></tr></thead>
+      const conceptClass = value => {
+        const score = Number(value);
+        if (Number.isNaN(score)) return '';
+        if (score >= 8.5) return 'good';
+        if (score >= 7) return 'mid';
+        return 'low';
+      };
+      const cardMarkup = `<div class="performance-grid">
+        ${byCollaborator.map(row => `
+          <article class="performance-card">
+            <div class="performance-head">
+              <div>
+                <strong>${escapeHtml(row.name)}</strong>
+                <small>${row.events} evento(s) &middot; ${row.count} participaci&oacute;n(es)</small>
+              </div>
+              <div class="performance-score">
+                <b>${escapeHtml(row.avg)}</b>
+                <span>Promedio</span>
+              </div>
+            </div>
+            <div class="performance-stats">
+              <div class="performance-stat"><b>${row.late}</b><span>Tardanzas</span></div>
+              <div class="performance-stat"><b>${row.lateRate}%</b><span>% tardanza</span></div>
+              <div class="performance-stat"><b>${row.avgLate} min</b><span>Prom. tarde</span></div>
+              <div class="performance-stat"><b>${row.count ? Math.max(0, 100 - row.lateRate) : 0}%</b><span>% a tiempo</span></div>
+            </div>
+            <div class="concept-grid">
+              ${metrics.map(metric => `
+                <div class="concept-chip ${conceptClass(row.metricAverages[metric])}">
+                  <b>${escapeHtml(row.metricAverages[metric])}</b>
+                  <span>${escapeHtml(metric)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </article>
+        `).join('')}
+      </div>`;
+      const tableMarkup = `<table class="mini-table">
+        <thead><tr><th>Colaborador</th><th>Eventos</th><th>Participaciones</th><th>Tardanzas</th><th>% tardanza</th><th>Promedio tarde</th><th>Desempeño</th>${metrics.map(metric => `<th>${escapeHtml(metric)}</th>`).join('')}</tr></thead>
         <tbody>${byCollaborator.map(row => `
           <tr>
             <td>${escapeHtml(row.name)}</td>
@@ -1257,9 +1447,11 @@
             <td>${row.lateRate}%</td>
             <td>${row.avgLate} min</td>
             <td>${escapeHtml(row.avg)}</td>
+            ${metrics.map(metric => `<td>${escapeHtml(row.metricAverages[metric])}</td>`).join('')}
           </tr>
         `).join('')}</tbody>
       </table>`;
+      detail.innerHTML = state.kpiView === 'table' ? tableMarkup : cardMarkup;
     }
 
     function openCheck(id) {
@@ -1275,6 +1467,7 @@
       const arrivalInput = document.getElementById('checkArrival');
       arrivalInput.disabled = true;
       arrivalInput.dataset.unlocked = 'false';
+      arrivalInput.dataset.original = person.arrival || '';
       arrivalInput.value = person.arrival || currentTime();
       document.getElementById('checkComment').value = person.comment || '';
       checkDialog.showModal();
@@ -1296,7 +1489,13 @@
       const person = state.people.find(item => item.id === state.activeId);
       if (!person) return;
       const arrivalInput = document.getElementById('checkArrival');
+      const originalArrival = arrivalInput.dataset.original || person.arrival || '';
       person.arrival = arrivalInput.dataset.unlocked === 'true' ? arrivalInput.value : currentTime();
+      if (arrivalInput.dataset.unlocked === 'true' && originalArrival !== person.arrival) {
+        person.manualArrival = true;
+        person.arrivalChangeLog = Array.isArray(person.arrivalChangeLog) ? person.arrivalChangeLog : [];
+        person.arrivalChangeLog.push({ changedAt: new Date().toISOString(), from: originalArrival || 'sin hora', to: person.arrival });
+      }
       person.comment = document.getElementById('checkComment').value.trim();
       person.signature = canvasToJpeg();
       person.checkedAt = new Date().toISOString();
@@ -1313,6 +1512,7 @@
       document.getElementById('evalTitle').textContent = `Evaluación de ${person.name}`;
       document.getElementById('editName').value = person.name;
       document.getElementById('editPosition').value = person.position;
+      document.getElementById('evalComment').value = person.evaluationComment || '';
       document.getElementById('scoreGrid').innerHTML = metrics.map(metric => `
         <div class="range-line">
           <span>${metric}</span>
@@ -1327,6 +1527,7 @@
       if (!person) return;
       person.name = document.getElementById('editName').value.trim() || person.name;
       person.position = document.getElementById('editPosition').value.trim();
+      person.evaluationComment = document.getElementById('evalComment').value.trim();
       document.querySelectorAll('[data-score]').forEach(input => { person.scores[input.dataset.score] = Number(input.value); });
       person.evaluatedAt = new Date().toISOString();
       renderAll();
@@ -1393,12 +1594,15 @@
       const code = formatCode(header.eventDate);
       const rows = [...state.people].sort(byName).map((person, index) => {
         const status = onTimeStatus(person);
-        return `<tr>
+        const lastArrivalChange = Array.isArray(person.arrivalChangeLog) && person.arrivalChangeLog.length ? person.arrivalChangeLog[person.arrivalChangeLog.length - 1] : null;
+        return `<tr class="${person.manualArrival ? 'manual-time' : ''}">
           <td>${index + 1}</td>
           <td>${escapeHtml(person.name)}</td>
           <td>${escapeHtml(status.label)}</td>
           <td>${person.evaluatedAt ? average(person) : '-'}</td>
           <td>${escapeHtml(person.comment || '-')}</td>
+          <td>${escapeHtml(person.evaluationComment || '-')}</td>
+          <td>${person.manualArrival ? `Hora colocada manualmente${lastArrivalChange ? ` (${escapeHtml(lastArrivalChange.from)} -> ${escapeHtml(lastArrivalChange.to)})` : ''}` : '-'}</td>
           <td>${person.signature ? 'Si' : 'No'}</td>
         </tr>`;
       }).join('');
@@ -1426,6 +1630,7 @@
           table { width: 100%; border-collapse: collapse; font-size: 11px; }
           th { background: #f5a313; color: #111827; }
           th, td { border: 1px solid #1f2937; padding: 6px; text-align: left; vertical-align: top; }
+          tr.manual-time td { background: #fff3cd; }
           .page-break { page-break-before: always; }
           .sig { display: grid; grid-template-columns: 1fr 260px; gap: 20px; align-items: center; border: 1px solid #d8dee8; border-radius: 6px; padding: 10px; margin-bottom: 10px; min-height: 92px; }
           .sig img { max-width: 260px; max-height: 70px; object-fit: contain; }
@@ -1444,8 +1649,8 @@
           <div><strong>Encargado</strong><br>${escapeHtml(header.manager || '-')}</div>
         </div>
         <table>
-          <thead><tr><th>#</th><th>Nombre</th><th>A tiempo</th><th>Promedio</th><th>Comentario</th><th>Check</th></tr></thead>
-          <tbody>${rows || '<tr><td colspan="6">Sin colaboradores registrados.</td></tr>'}</tbody>
+          <thead><tr><th>#</th><th>Nombre</th><th>A tiempo</th><th>Promedio</th><th>Comentario</th><th>Observaciones</th><th>Hora manual</th><th>Check</th></tr></thead>
+          <tbody>${rows || '<tr><td colspan="8">Sin colaboradores registrados.</td></tr>'}</tbody>
         </table>
         ${signatures ? `<section class="page-break"><h1>Anexo de firmas</h1>${signatures}</section>` : ''}
         <script>setTimeout(() => window.print(), 500);<\/script>
@@ -1606,7 +1811,7 @@
     function latin1Bytes(value) { const bytes = new Uint8Array(value.length); for (let i = 0; i < value.length; i++) bytes[i] = value.charCodeAt(i) & 0xff; return bytes; }
 
     function newPerson(name, estimated, secret, internalCode = '', eventRole = '') {
-      return { id: uid(), name, estimated, secret: secret || '', internalCode, eventRole, position: eventRole, arrival: '', comment: '', scores: blankScores(), signature: '', checkedAt: '', evaluatedAt: '' };
+      return { id: uid(), name, estimated, secret: secret || '', internalCode, eventRole, position: eventRole, arrival: '', comment: '', evaluationComment: '', scores: blankScores(), signature: '', checkedAt: '', evaluatedAt: '', manualArrival: false, arrivalChangeLog: [] };
     }
     function collaboratorRoles(collaborator) {
       return Array.isArray(collaborator.roles) ? collaborator.roles : [];
@@ -1976,6 +2181,8 @@
     document.getElementById('syncSheet').addEventListener('click', syncToGoogleSheets);
     document.getElementById('loadHistory').addEventListener('click', loadHistoryFromGoogleSheets);
     document.getElementById('historyEventSearch').addEventListener('input', renderHistoryEvents);
+    document.getElementById('historyDateFrom').addEventListener('input', renderHistoryEvents);
+    document.getElementById('historyDateTo').addEventListener('input', renderHistoryEvents);
     document.getElementById('historyEventList').addEventListener('click', event => {
       if (event.target.dataset.restoreEvent) restoreHistoryEvent(event.target.dataset.restoreEvent);
     });
@@ -1983,13 +2190,20 @@
     document.getElementById('kpiDateFrom').addEventListener('input', renderKpisDashboard);
     document.getElementById('kpiDateTo').addEventListener('input', renderKpisDashboard);
     document.getElementById('kpiCollaborator').addEventListener('change', renderKpisDashboard);
+    document.getElementById('kpiEvent').addEventListener('change', renderKpisDashboard);
+    document.getElementById('kpiCardView').addEventListener('click', () => { state.kpiView = 'cards'; renderKpisDashboard(); });
+    document.getElementById('kpiTableView').addEventListener('click', () => { state.kpiView = 'table'; renderKpisDashboard(); });
+    document.getElementById('saveConfig').addEventListener('click', saveConfigFromUi);
+    document.getElementById('resetConfig').addEventListener('click', resetConfigToDefaults);
     document.getElementById('clearKpiFilters').addEventListener('click', () => {
       document.getElementById('kpiDateFrom').value = '';
       document.getElementById('kpiDateTo').value = '';
       document.getElementById('kpiCollaborator').value = '';
+      document.getElementById('kpiEvent').value = '';
       renderKpisDashboard();
     });
     function resetCurrentEvent() {
+      if (!ensureEventAccess()) return;
       if (!confirm('¿Crear un documento nuevo y borrar el avance de este dispositivo?')) return;
       localStorage.removeItem(storageKey);
       state.people = [];
@@ -2013,6 +2227,7 @@
     window.addEventListener('resize', () => checkDialog.open && resizeCanvas());
 
     loadLocal();
+    loadAppConfig();
     const manualSecretInput = document.getElementById('manualSecret');
     if (manualSecretInput) manualSecretInput.closest('label').style.display = 'none';
     const manualNameInput = document.getElementById('manualName');
