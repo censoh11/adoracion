@@ -338,6 +338,7 @@
           <div class="actions wide">
             <button class="btn" id="refreshKpis">Actualizar KPIs</button>
             <button class="btn" id="clearKpiFilters">Ver todos</button>
+            <button class="btn green" id="exportKpiReport" type="button">Reporte auditoría</button>
             <button class="btn primary" id="kpiCardView" type="button">Vista tarjetas</button>
             <button class="btn" id="kpiTableView" type="button">Vista tabla</button>
           </div>
@@ -1335,6 +1336,140 @@
       const tolerance = Number(row.lateTolerance || 5);
       return Math.max(0, toMinutes(row.arrival) - (toMinutes(row.startTime) + tolerance));
     }
+    function parseScoreValue(row, metric) {
+      try { return Number(JSON.parse(row.scores || '{}')[metric]); } catch { return 0; }
+    }
+    function buildKpiCollaboratorSummary(kpiRows) {
+      return [...new Set(kpiRows.map(row => row.collaboratorName).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
+        .map(name => {
+          const personRows = kpiRows.filter(row => row.collaboratorName === name);
+          const personLate = personRows.filter(row => row.onTime === 'No' || row.punctualityStatus === 'Tarde');
+          const personAvgScores = personRows.map(row => Number(row.averageScore)).filter(value => !Number.isNaN(value) && value > 0);
+          const personAvg = personAvgScores.length ? Math.round(personAvgScores.reduce((sum, value) => sum + value, 0) / personAvgScores.length * 10) / 10 : '-';
+          const personAvgLate = personLate.length ? Math.round(personLate.reduce((sum, row) => sum + lateMinutes(row), 0) / personLate.length) : 0;
+          const metricAverages = {};
+          metrics.forEach(metric => {
+            const values = personRows.map(row => parseScoreValue(row, metric)).filter(value => value > 0);
+            metricAverages[metric] = values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length * 10) / 10 : '-';
+          });
+          return { name, count: personRows.length, events: new Set(personRows.map(row => row.eventId).filter(Boolean)).size, late: personLate.length, lateRate: personRows.length ? Math.round(personLate.length / personRows.length * 100) : 0, avgLate: personAvgLate, avg: personAvg, metricAverages };
+        });
+    }
+    function currentKpiFiltersLabel() {
+      const eventSelect = document.getElementById('kpiEvent');
+      return {
+        from: document.getElementById('kpiDateFrom')?.value || 'Todos',
+        to: document.getElementById('kpiDateTo')?.value || 'Todos',
+        collaborator: document.getElementById('kpiCollaborator')?.value || 'Todos',
+        event: eventSelect?.selectedOptions?.[0]?.textContent || 'Todos'
+      };
+    }
+    function exportKpiReport() {
+      if (!state.historyUnlocked) return alert('Abre KPIs con el código autorizado antes de generar el reporte.');
+      const kpiRows = filteredKpiRows();
+      if (!kpiRows.length) return alert('No hay registros para generar el reporte con esos filtros.');
+      const byCollaborator = buildKpiCollaboratorSummary(kpiRows);
+      const lateRows = kpiRows.filter(row => row.onTime === 'No' || row.punctualityStatus === 'Tarde');
+      const onTimeCount = kpiRows.filter(row => row.onTime === 'Si' || row.punctualityStatus === 'A tiempo').length;
+      const checkedCount = kpiRows.filter(row => row.checked === 'Si').length;
+      const evaluatedCount = kpiRows.filter(row => row.evaluatedAt || row.averageScore).length;
+      const averages = kpiRows.map(row => Number(row.averageScore)).filter(value => !Number.isNaN(value) && value > 0);
+      const filters = currentKpiFiltersLabel();
+      const summary = {
+        events: new Set(kpiRows.map(row => row.eventId).filter(Boolean)).size,
+        participations: kpiRows.length,
+        lateRate: kpiRows.length ? `${Math.round(lateRows.length / kpiRows.length * 100)}%` : '0%',
+        avgLate: `${lateRows.length ? Math.round(lateRows.reduce((sum, row) => sum + lateMinutes(row), 0) / lateRows.length) : 0} min`,
+        avgScore: averages.length ? Math.round(averages.reduce((sum, value) => sum + value, 0) / averages.length * 10) / 10 : '-',
+        onTimeRate: kpiRows.length ? `${Math.round(onTimeCount / kpiRows.length * 100)}%` : '0%',
+        checkRate: kpiRows.length ? `${Math.round(checkedCount / kpiRows.length * 100)}%` : '0%',
+        evalRate: kpiRows.length ? `${Math.round(evaluatedCount / kpiRows.length * 100)}%` : '0%'
+      };
+      const generatedAt = new Date().toLocaleString('es-DO');
+      const report = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Reporte KPI - Hebreos 11</title>
+        <style>
+          @page { size: legal landscape; margin: 12mm; }
+          * { box-sizing: border-box; }
+          body { font-family: Arial, Helvetica, sans-serif; color: #1f2937; margin: 0; background: #fff; font-size: 11px; }
+          header { display: grid; grid-template-columns: 72px 1fr auto; gap: 16px; align-items: center; border-bottom: 3px solid #0b2d52; padding-bottom: 10px; margin-bottom: 14px; }
+          header img { width: 68px; height: 68px; object-fit: contain; }
+          h1, h2, h3 { margin: 0; }
+          h1 { color: #0b2d52; font-size: 22px; letter-spacing: 0; }
+          h2 { color: #f5a313; font-size: 15px; margin-top: 2px; }
+          h3 { color: #0b2d52; font-size: 15px; margin: 18px 0 8px; }
+          .meta { text-align: right; color: #667085; line-height: 1.5; }
+          .filters, .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+          .box { border: 1px solid #d8dee8; border-radius: 7px; padding: 8px; background: #f8fafc; min-height: 48px; }
+          .box b { display: block; color: #0b2d52; font-size: 14px; }
+          .box span { color: #667085; font-size: 10px; }
+          table { width: 100%; border-collapse: collapse; page-break-inside: auto; }
+          th, td { border: 1px solid #d8dee8; padding: 5px 6px; text-align: left; vertical-align: top; }
+          th { background: #0b2d52; color: #fff; font-size: 10px; }
+          tbody tr:nth-child(even) td { background: #f8fafc; }
+          .score-table th.metric, .score-table td.metric { text-align: center; min-width: 54px; }
+          .detail-table { font-size: 10px; }
+          .detail-table th { background: #f5a313; color: #111827; }
+          .print-actions { margin-bottom: 12px; }
+          .print-actions button { border: 0; border-radius: 7px; background: #0b2d52; color: #fff; padding: 10px 14px; font-weight: 700; cursor: pointer; }
+          .muted { color: #667085; }
+          .page-break { page-break-before: always; }
+          @media print { .print-actions { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+        </style></head><body>
+        <div class="print-actions"><button onclick="window.print()">Guardar como PDF</button></div>
+        <header>
+          <img src="${logoPath}" alt="Logo">
+          <div><h1>IGLESIA VISIONARIA HEBREOS 11</h1><h2>PILAR DE ADORACIÓN · REPORTE DE KPIs</h2></div>
+          <div class="meta"><b>Generado</b><br>${escapeHtml(generatedAt)}<br><span>Reporte para auditoría</span></div>
+        </header>
+        <section class="filters">
+          <div class="box"><span>Desde</span><b>${escapeHtml(filters.from)}</b></div>
+          <div class="box"><span>Hasta</span><b>${escapeHtml(filters.to)}</b></div>
+          <div class="box"><span>Colaborador</span><b>${escapeHtml(filters.collaborator)}</b></div>
+          <div class="box"><span>Evento</span><b>${escapeHtml(filters.event)}</b></div>
+        </section>
+        <section class="kpis">
+          <div class="box"><span>Cantidad de eventos</span><b>${summary.events}</b></div>
+          <div class="box"><span>Participaciones</span><b>${summary.participations}</b></div>
+          <div class="box"><span>% tardanzas</span><b>${summary.lateRate}</b></div>
+          <div class="box"><span>Promedio tarde</span><b>${summary.avgLate}</b></div>
+          <div class="box"><span>Desempeño promedio</span><b>${escapeHtml(summary.avgScore)}</b></div>
+          <div class="box"><span>% a tiempo</span><b>${summary.onTimeRate}</b></div>
+          <div class="box"><span>% checking</span><b>${summary.checkRate}</b></div>
+          <div class="box"><span>% evaluado</span><b>${summary.evalRate}</b></div>
+        </section>
+        <h3>Resumen horizontal por colaborador</h3>
+        <table class="score-table">
+          <thead><tr><th>Colaborador</th><th>Eventos</th><th>Particip.</th><th>Tardanzas</th><th>% tardanza</th><th>Prom. tarde</th><th>Desempeño</th>${metrics.map(metric => `<th class="metric">${escapeHtml(metric)}</th>`).join('')}</tr></thead>
+          <tbody>${byCollaborator.map(row => `<tr><td><b>${escapeHtml(row.name)}</b></td><td>${row.events}</td><td>${row.count}</td><td>${row.late}</td><td>${row.lateRate}%</td><td>${row.avgLate} min</td><td>${escapeHtml(row.avg)}</td>${metrics.map(metric => `<td class="metric">${escapeHtml(row.metricAverages[metric])}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table>
+        <section class="page-break">
+          <h3>Detalle de registros filtrados</h3>
+          <table class="detail-table">
+            <thead><tr><th>Fecha</th><th>Evento</th><th>ID evento</th><th>Colaborador</th><th>Cargo</th><th>A tiempo</th><th>Tarde min</th><th>Checking</th><th>Evaluado</th><th>Promedio</th><th>Observaciones / Comentarios</th></tr></thead>
+            <tbody>${kpiRows
+              .sort((a, b) => `${a.eventDate || ''}${a.collaboratorName || ''}`.localeCompare(`${b.eventDate || ''}${b.collaboratorName || ''}`, 'es', { sensitivity: 'base' }))
+              .map(row => `<tr><td>${escapeHtml(row.eventDate || '-')}</td><td>${escapeHtml(row.eventName || row.eventType || 'Evento')}</td><td>${escapeHtml(row.eventId || '-')}</td><td>${escapeHtml(row.collaboratorName || '-')}</td><td>${escapeHtml(row.role || '-')}</td><td>${escapeHtml(row.onTime || row.punctualityStatus || '-')}</td><td>${lateMinutes(row)}</td><td>${escapeHtml(row.checked || '-')}</td><td>${row.evaluatedAt || row.averageScore ? 'Si' : 'No'}</td><td>${escapeHtml(row.averageScore || '-')}</td><td>${escapeHtml(row.evaluationComment || row.comment || '')}</td></tr>`)
+              .join('')}</tbody>
+          </table>
+        </section>
+        <script>setTimeout(() => window.print(), 500);<\/script>
+      </body></html>`;
+      const win = window.open('', '_blank');
+      if (!win) {
+        const blob = new Blob([report], { type: 'text/html' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `reporte-kpi-hebreos-11-${new Date().toISOString().slice(0, 10)}.html`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return;
+      }
+      win.document.open();
+      win.document.write(report);
+      win.document.close();
+    }
     function renderKpisDashboard() {
       const select = document.getElementById('kpiCollaborator');
       const detail = document.getElementById('kpiDetail');
@@ -1382,23 +1517,7 @@
         detail.innerHTML = '<p class="helper">No hay registros para esos filtros.</p>';
         return;
       }
-      const byCollaborator = [...new Set(kpiRows.map(row => row.collaboratorName).filter(Boolean))]
-        .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
-        .map(name => {
-          const personRows = kpiRows.filter(row => row.collaboratorName === name);
-          const personLate = personRows.filter(row => row.onTime === 'No' || row.punctualityStatus === 'Tarde');
-          const personAvgScores = personRows.map(row => Number(row.averageScore)).filter(value => !Number.isNaN(value) && value > 0);
-          const personAvg = personAvgScores.length ? Math.round(personAvgScores.reduce((sum, value) => sum + value, 0) / personAvgScores.length * 10) / 10 : '-';
-          const personAvgLate = personLate.length ? Math.round(personLate.reduce((sum, row) => sum + lateMinutes(row), 0) / personLate.length) : 0;
-          const metricAverages = {};
-          metrics.forEach(metric => {
-            const values = personRows.map(row => {
-              try { return Number(JSON.parse(row.scores || '{}')[metric]); } catch { return 0; }
-            }).filter(value => value > 0);
-            metricAverages[metric] = values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length * 10) / 10 : '-';
-          });
-          return { name, count: personRows.length, events: new Set(personRows.map(row => row.eventId).filter(Boolean)).size, late: personLate.length, lateRate: personRows.length ? Math.round(personLate.length / personRows.length * 100) : 0, avgLate: personAvgLate, avg: personAvg, metricAverages };
-        });
+      const byCollaborator = buildKpiCollaboratorSummary(kpiRows);
       const conceptClass = value => {
         const score = Number(value);
         if (Number.isNaN(score)) return '';
@@ -2193,6 +2312,7 @@
     document.getElementById('kpiEvent').addEventListener('change', renderKpisDashboard);
     document.getElementById('kpiCardView').addEventListener('click', () => { state.kpiView = 'cards'; renderKpisDashboard(); });
     document.getElementById('kpiTableView').addEventListener('click', () => { state.kpiView = 'table'; renderKpisDashboard(); });
+    document.getElementById('exportKpiReport').addEventListener('click', exportKpiReport);
     document.getElementById('saveConfig').addEventListener('click', saveConfigFromUi);
     document.getElementById('resetConfig').addEventListener('click', resetConfigToDefaults);
     document.getElementById('clearKpiFilters').addEventListener('click', () => {
